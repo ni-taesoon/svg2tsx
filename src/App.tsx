@@ -1,88 +1,154 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
-import { getCurrentWindow } from "@tauri-apps/api/window";
+import { useState, useEffect } from "react";
 import { useTheme } from "./useTheme";
+import {
+  TitleBar,
+  SvgInputPanel,
+  TsxOutputPanel,
+  OptionsPanel,
+  ConversionOptions,
+} from "./components";
 import "./App.css";
 
+const defaultOptions: ConversionOptions = {
+  removeUnnecessaryAttrs: true,
+  removeComments: true,
+  removeEmptyGroups: true,
+  convertToCurrentColor: false,
+  componentName: "Icon",
+  exportType: "default",
+  useMemo: false,
+  useForwardRef: false,
+  addSizeProps: true,
+};
+
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
   const { theme, setTheme } = useTheme();
+  const [svgInput, setSvgInput] = useState("");
+  const [tsxOutput, setTsxOutput] = useState("");
+  const [options, setOptions] = useState<ConversionOptions>(defaultOptions);
 
-  async function greet() {
-    setGreetMsg(await invoke("greet", { name }));
-  }
+  // Simple SVG to TSX conversion (placeholder - will be enhanced later)
+  useEffect(() => {
+    if (!svgInput.trim()) {
+      setTsxOutput("");
+      return;
+    }
 
-  const handleDragStart = () => {
-    getCurrentWindow().startDragging();
-  };
-
-  const handleDoubleClick = () => {
-    getCurrentWindow().toggleMaximize();
-  };
+    // Basic conversion logic (to be replaced with proper implementation)
+    const converted = generateTsxCode(svgInput, options);
+    setTsxOutput(converted);
+  }, [svgInput, options]);
 
   return (
-    <>
-      <div
-        className="drag-region"
-        onMouseDown={handleDragStart}
-        onDoubleClick={handleDoubleClick}
-      />
-      <div className="theme-selector">
-        <button
-          className={theme === "system" ? "active" : ""}
-          onClick={() => setTheme("system")}
-        >
-          System
-        </button>
-        <button
-          className={theme === "light" ? "active" : ""}
-          onClick={() => setTheme("light")}
-        >
-          Light
-        </button>
-        <button
-          className={theme === "dark" ? "active" : ""}
-          onClick={() => setTheme("dark")}
-        >
-          Dark
-        </button>
-      </div>
-      <main className="container">
-        <h1>Welcome to Tauri + React</h1>
+    <div className="app">
+      <TitleBar theme={theme} onThemeChange={setTheme} />
 
-        <div className="row">
-          <a href="https://vite.dev" target="_blank">
-            <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-          </a>
-          <a href="https://tauri.app" target="_blank">
-            <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-          </a>
-          <a href="https://react.dev" target="_blank">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
+      <main className="app__main">
+        <div className="app__panels">
+          <div className="app__panel app__panel--left">
+            <SvgInputPanel value={svgInput} onChange={setSvgInput} />
+          </div>
+          <div className="app__panel app__panel--right">
+            <TsxOutputPanel
+              code={tsxOutput}
+              componentName={options.componentName}
+            />
+          </div>
         </div>
-        <p>Click on the Tauri, Vite, and React logos to learn more.</p>
 
-        <form
-          className="row"
-          onSubmit={(e) => {
-            e.preventDefault();
-            greet();
-          }}
-        >
-          <input
-            id="greet-input"
-            onChange={(e) => setName(e.currentTarget.value)}
-            placeholder="Enter a name..."
-          />
-          <button type="submit">Greet</button>
-        </form>
-        <p>{greetMsg}</p>
+        <div className="app__options">
+          <OptionsPanel options={options} onChange={setOptions} />
+        </div>
       </main>
-    </>
+    </div>
   );
+}
+
+// Simple TSX code generator (placeholder implementation)
+function generateTsxCode(svg: string, options: ConversionOptions): string {
+  const { componentName, exportType, useMemo, useForwardRef, addSizeProps } =
+    options;
+
+  // Convert SVG attributes to React JSX format
+  let processedSvg = svg
+    .replace(/class=/g, "className=")
+    .replace(/fill-rule=/g, "fillRule=")
+    .replace(/clip-rule=/g, "clipRule=")
+    .replace(/stroke-width=/g, "strokeWidth=")
+    .replace(/stroke-linecap=/g, "strokeLinecap=")
+    .replace(/stroke-linejoin=/g, "strokeLinejoin=")
+    .replace(/stroke-miterlimit=/g, "strokeMiterlimit=")
+    .replace(/font-size=/g, "fontSize=")
+    .replace(/font-family=/g, "fontFamily=")
+    .replace(/text-anchor=/g, "textAnchor=")
+    .replace(/xlink:href=/g, "href=")
+    .replace(/xmlns:xlink="[^"]*"/g, "")
+    .replace(/xmlns="[^"]*"/g, "");
+
+  // Remove extra whitespace
+  processedSvg = processedSvg.trim();
+
+  // Build imports
+  const imports: string[] = [];
+  if (addSizeProps) {
+    imports.push("SVGProps");
+  }
+  if (useMemo) {
+    imports.push("memo");
+  }
+  if (useForwardRef) {
+    imports.push("forwardRef");
+  }
+
+  const importStatement =
+    imports.length > 0
+      ? `import { ${imports.join(", ")} } from 'react';\n\n`
+      : "";
+
+  // Build interface
+  const interfaceStr = addSizeProps
+    ? `interface ${componentName}Props extends SVGProps<SVGSVGElement> {
+  size?: number;
+}
+
+`
+    : "";
+
+  // Build component
+  let component: string;
+  const propsType = addSizeProps ? `${componentName}Props` : "{}";
+  const propsDestructure = addSizeProps
+    ? "{ size = 24, ...props }"
+    : "props";
+
+  if (useForwardRef) {
+    component = `const ${componentName} = forwardRef<SVGSVGElement, ${propsType}>(
+  (${propsDestructure}, ref) => (
+    ${processedSvg.replace("<svg", "<svg ref={ref}")}
+  )
+);
+
+${componentName}.displayName = '${componentName}';`;
+  } else {
+    component = `const ${componentName} = (${propsDestructure}: ${propsType}) => (
+  ${processedSvg}
+);`;
+  }
+
+  // Wrap with memo if needed
+  if (useMemo) {
+    component += `\n\nconst Memoized${componentName} = memo(${componentName});`;
+  }
+
+  // Build export
+  const exportName = useMemo ? `Memoized${componentName}` : componentName;
+  const exportStatement =
+    exportType === "default"
+      ? `\nexport default ${exportName};`
+      : `\nexport { ${exportName}${useMemo ? ` as ${componentName}` : ""} };`;
+
+  return `${importStatement}${interfaceStr}${component}${exportStatement}
+`;
 }
 
 export default App;

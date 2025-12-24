@@ -1,0 +1,1 @@
+export { SvgInputPanel } from "./SvgInputPanel";
