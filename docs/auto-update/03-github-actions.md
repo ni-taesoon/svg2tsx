@@ -1,3 +1,27 @@
+# Phase 3: GitHub Actions 설정
+
+## 3.1 GitHub Secrets 등록
+
+GitHub 저장소 Settings > Secrets and variables > Actions에서 추가:
+
+| Secret 이름 | 값 |
+|------------|-----|
+| `TAURI_SIGNING_PRIVATE_KEY` | `~/.tauri/svg2tsx.key` 파일 내용 전체 |
+| `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` | 키 생성 시 입력한 비밀번호 |
+
+### 개인키 내용 확인
+
+```bash
+cat ~/.tauri/svg2tsx.key
+```
+
+> ⚠️ 이 내용을 GitHub Secrets에만 저장하고, 절대 코드에 포함시키지 않는다.
+
+## 3.2 release.yml 수정
+
+`.github/workflows/release.yml` 수정:
+
+```yaml
 name: Release
 
 on:
@@ -88,3 +112,51 @@ jobs:
           prerelease: false
           includeUpdaterJson: true
           args: --target ${{ matrix.target }}
+```
+
+### 변경 사항
+
+1. **환경 변수 추가**:
+   - `TAURI_SIGNING_PRIVATE_KEY`: 빌드 시 서명용
+   - `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`: 키 복호화용
+
+2. **tauri-action 옵션 추가**:
+   - `includeUpdaterJson: true`: `latest.json` 자동 생성 및 업로드
+
+## 3.3 latest.json 구조
+
+tauri-action이 자동 생성하는 `latest.json` 예시:
+
+```json
+{
+  "version": "0.2.0",
+  "notes": "SVG2TSX v0.2.0 릴리스...",
+  "pub_date": "2025-01-15T10:30:00.000Z",
+  "platforms": {
+    "darwin-aarch64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6...",
+      "url": "https://github.com/.../Svg2Tsx_0.2.0_aarch64.app.tar.gz"
+    },
+    "darwin-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6...",
+      "url": "https://github.com/.../Svg2Tsx_0.2.0_x64.app.tar.gz"
+    },
+    "linux-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6...",
+      "url": "https://github.com/.../svg2tsx_0.2.0_amd64.AppImage"
+    },
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6...",
+      "url": "https://github.com/.../Svg2Tsx_0.2.0_x64-setup.nsis.exe"
+    }
+  }
+}
+```
+
+## 완료 체크리스트
+
+- [ ] `TAURI_SIGNING_PRIVATE_KEY` 시크릿 등록
+- [ ] `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` 시크릿 등록
+- [ ] `release.yml`에 환경 변수 추가
+- [ ] `release.yml`에 `includeUpdaterJson: true` 추가
+- [ ] 테스트 태그 푸시로 workflow 검증

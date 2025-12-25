@@ -4,6 +4,7 @@ import { MainPage } from '@/pages/main';
 import { ThemeProvider } from './providers';
 import { ThemeToggle } from '@/features/theme-toggle';
 import { Toaster, SnowEffect } from '@/shared/ui';
+import { UpdateBanner } from '@/widgets/update-banner';
 import './styles/globals.css';
 
 function DragRegion() {
@@ -34,6 +35,7 @@ function App() {
       </div>
       <MainPage className="pt-[52px]" />
       <Toaster position="bottom-right" richColors closeButton />
+      <UpdateBanner />
     </ThemeProvider>
   );
 }

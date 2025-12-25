@@ -66,6 +66,7 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_clipboard_manager::init())
+        .plugin(tauri_plugin_process::init())
         .invoke_handler(tauri::generate_handler![
             set_theme_color,
             file_io::read_svg_file,
@@ -74,6 +75,10 @@ pub fn run() {
             dialog::save_file_dialog,
         ])
         .setup(|app| {
+            // 데스크톱에서만 자동 업데이트 플러그인 활성화
+            #[cfg(desktop)]
+            app.handle().plugin(tauri_plugin_updater::Builder::new().build())?;
+
             // 앱 시작 시 기본 배경색 설정 (다크 테마: #2f2f2f)
             #[cfg(target_os = "macos")]
             {
