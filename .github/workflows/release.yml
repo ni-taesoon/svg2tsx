@@ -75,6 +75,14 @@ jobs:
           tauriScript: bunx tauri
           args: --target ${{ matrix.target }}
 
+      - name: List build output
+        run: |
+          echo "=== All files in bundle directory ==="
+          find src-tauri/target/${{ matrix.target }}/release/bundle -type f 2>/dev/null || echo "Bundle directory not found"
+          echo ""
+          echo "=== Looking for .sig files ==="
+          find src-tauri/target -name "*.sig" 2>/dev/null || echo "No .sig files found"
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -108,7 +116,12 @@ jobs:
           merge-multiple: true
 
       - name: Display structure of downloaded files
-        run: find artifacts -type f | head -50
+        run: |
+          echo "=== All downloaded files ==="
+          find artifacts -type f
+          echo ""
+          echo "=== Looking for .sig files ==="
+          find artifacts -name "*.sig" || echo "No .sig files in artifacts"
 
       - name: Get version from tag
         id: version
