@@ -1,0 +1,110 @@
+name: Coverage Report
+
+on:
+  # 매일 오전 9시 (KST) 실행
+  schedule:
+    - cron: '0 0 * * *'
+  # 수동 실행 가능
+  workflow_dispatch:
+
+jobs:
+  coverage-report:
+    name: Generate Coverage Report
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run tests with coverage
+        run: bun run test:coverage --run
+        continue-on-error: true
+
+      - name: Generate coverage summary
+        id: coverage
+        run: |
+          # JSON 커버리지 리포트 파싱
+          if [ -f "coverage/coverage-summary.json" ]; then
+            LINES=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+            STATEMENTS=$(jq '.total.statements.pct' coverage/coverage-summary.json)
+            FUNCTIONS=$(jq '.total.functions.pct' coverage/coverage-summary.json)
+            BRANCHES=$(jq '.total.branches.pct' coverage/coverage-summary.json)
+          else
+            LINES="N/A"
+            STATEMENTS="N/A"
+            FUNCTIONS="N/A"
+            BRANCHES="N/A"
+          fi
+
+          echo "lines=$LINES" >> $GITHUB_OUTPUT
+          echo "statements=$STATEMENTS" >> $GITHUB_OUTPUT
+          echo "functions=$FUNCTIONS" >> $GITHUB_OUTPUT
+          echo "branches=$BRANCHES" >> $GITHUB_OUTPUT
+
+          # 날짜
+          echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const date = '${{ steps.coverage.outputs.date }}';
+            const lines = '${{ steps.coverage.outputs.lines }}';
+            const statements = '${{ steps.coverage.outputs.statements }}';
+            const functions = '${{ steps.coverage.outputs.functions }}';
+            const branches = '${{ steps.coverage.outputs.branches }}';
+
+            // 커버리지 상태 이모지
+            const getStatus = (pct) => {
+              if (pct === 'N/A') return '⚪';
+              const num = parseFloat(pct);
+              if (num >= 80) return '🟢';
+              if (num >= 60) return '🟡';
+              return '🔴';
+            };
+
+            const body = `## 📊 일간 테스트 커버리지 리포트
+
+            **생성일**: ${date}
+            **커밋**: ${context.sha.substring(0, 7)}
+            **브랜치**: ${context.ref.replace('refs/heads/', '')}
+
+            ### 커버리지 요약
+
+            | 항목 | 커버리지 | 상태 |
+            |------|----------|------|
+            | Lines | ${lines}% | ${getStatus(lines)} |
+            | Statements | ${statements}% | ${getStatus(statements)} |
+            | Functions | ${functions}% | ${getStatus(functions)} |
+            | Branches | ${branches}% | ${getStatus(branches)} |
+
+            ### 목표 대비 현황
+
+            | 레이어 | 목표 | 현재 상태 |
+            |--------|------|-----------|
+            | entities/ | 90%+ | - |
+            | features/ | 80%+ | - |
+            | widgets/ | 70%+ | - |
+
+            ---
+            🔗 [워크플로우 실행 로그](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+            `;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📊 일간 커버리지 리포트 - ${date}`,
+              body: body,
+              labels: ['coverage-report', 'automated']
+            });
