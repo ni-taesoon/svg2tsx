@@ -25,10 +25,11 @@ jobs:
             target: aarch64-apple-darwin
           - platform: macos-latest
             target: x86_64-apple-darwin
-          - platform: ubuntu-22.04
-            target: x86_64-unknown-linux-gnu
-          - platform: windows-latest
-            target: x86_64-pc-windows-msvc
+          # TODO: 나중에 다시 활성화
+          # - platform: ubuntu-22.04
+          #   target: x86_64-unknown-linux-gnu
+          # - platform: windows-latest
+          #   target: x86_64-pc-windows-msvc
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -82,14 +83,15 @@ jobs:
             src-tauri/target/${{ matrix.target }}/release/bundle/**/*.dmg
             src-tauri/target/${{ matrix.target }}/release/bundle/**/*.app.tar.gz
             src-tauri/target/${{ matrix.target }}/release/bundle/**/*.app.tar.gz.sig
-            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
-            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage
-            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage.sig
-            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.msi
-            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.msi.sig
-            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
-            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.nsis.zip
-            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.nsis.zip.sig
+          # TODO: 나중에 다시 활성화 (Linux/Windows)
+          # src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
+          # src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage
+          # src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage.sig
+          # src-tauri/target/${{ matrix.target }}/release/bundle/**/*.msi
+          # src-tauri/target/${{ matrix.target }}/release/bundle/**/*.msi.sig
+          # src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
+          # src-tauri/target/${{ matrix.target }}/release/bundle/**/*.nsis.zip
+          # src-tauri/target/${{ matrix.target }}/release/bundle/**/*.nsis.zip.sig
           if-no-files-found: error
 
   publish:
@@ -117,20 +119,21 @@ jobs:
         run: |
           mkdir -p release-files
 
-          # Find and copy all release files
+          # Find and copy all release files (macOS only for now)
           find artifacts -type f \( \
             -name "*.dmg" -o \
             -name "*.app.tar.gz" -o \
-            -name "*.app.tar.gz.sig" -o \
-            -name "*.deb" -o \
-            -name "*.AppImage" -o \
-            -name "*.AppImage.sig" -o \
-            -name "*.msi" -o \
-            -name "*.msi.sig" -o \
-            -name "*.exe" -o \
-            -name "*.nsis.zip" -o \
-            -name "*.nsis.zip.sig" \
+            -name "*.app.tar.gz.sig" \
           \) -exec cp {} release-files/ \;
+          # TODO: 나중에 다시 활성화 (Linux/Windows)
+          # -name "*.deb" -o \
+          # -name "*.AppImage" -o \
+          # -name "*.AppImage.sig" -o \
+          # -name "*.msi" -o \
+          # -name "*.msi.sig" -o \
+          # -name "*.exe" -o \
+          # -name "*.nsis.zip" -o \
+          # -name "*.nsis.zip.sig" \
 
           echo "Files to release:"
           ls -la release-files/
@@ -141,11 +144,9 @@ jobs:
           REPO="ni-taesoon/svgtsx-release"
           BASE_URL="https://github.com/${REPO}/releases/download/${{ github.ref_name }}"
 
-          # Read signatures
+          # Read signatures (macOS only for now)
           DARWIN_AARCH64_SIG=""
           DARWIN_X64_SIG=""
-          LINUX_SIG=""
-          WINDOWS_SIG=""
 
           if [ -f "release-files/Svg2Tsx_${VERSION}_aarch64.app.tar.gz.sig" ]; then
             DARWIN_AARCH64_SIG=$(cat "release-files/Svg2Tsx_${VERSION}_aarch64.app.tar.gz.sig")
@@ -155,15 +156,7 @@ jobs:
             DARWIN_X64_SIG=$(cat "release-files/Svg2Tsx_${VERSION}_x64.app.tar.gz.sig")
           fi
 
-          if [ -f "release-files/svg2tsx_${VERSION}_amd64.AppImage.sig" ]; then
-            LINUX_SIG=$(cat "release-files/svg2tsx_${VERSION}_amd64.AppImage.sig")
-          fi
-
-          if [ -f "release-files/Svg2Tsx_${VERSION}_x64-setup.nsis.zip.sig" ]; then
-            WINDOWS_SIG=$(cat "release-files/Svg2Tsx_${VERSION}_x64-setup.nsis.zip.sig")
-          fi
-
-          # Generate latest.json
+          # Generate latest.json (macOS only for now)
           cat > release-files/latest.json << EOF
           {
             "version": "${VERSION}",
@@ -177,18 +170,19 @@ jobs:
               "darwin-x86_64": {
                 "signature": "${DARWIN_X64_SIG}",
                 "url": "${BASE_URL}/Svg2Tsx_${VERSION}_x64.app.tar.gz"
-              },
-              "linux-x86_64": {
-                "signature": "${LINUX_SIG}",
-                "url": "${BASE_URL}/svg2tsx_${VERSION}_amd64.AppImage"
-              },
-              "windows-x86_64": {
-                "signature": "${WINDOWS_SIG}",
-                "url": "${BASE_URL}/Svg2Tsx_${VERSION}_x64-setup.nsis.zip"
               }
             }
           }
           EOF
+          # TODO: 나중에 다시 활성화 (Linux/Windows)
+          # "linux-x86_64": {
+          #   "signature": "${LINUX_SIG}",
+          #   "url": "${BASE_URL}/svg2tsx_${VERSION}_amd64.AppImage"
+          # },
+          # "windows-x86_64": {
+          #   "signature": "${WINDOWS_SIG}",
+          #   "url": "${BASE_URL}/Svg2Tsx_${VERSION}_x64-setup.nsis.zip"
+          # }
 
           echo "Generated latest.json:"
           cat release-files/latest.json
@@ -206,8 +200,6 @@ jobs:
             ## 다운로드
             - **macOS (Apple Silicon)**: `.dmg` (aarch64)
             - **macOS (Intel)**: `.dmg` (x86_64)
-            - **Windows**: `.exe` 설치 프로그램
-            - **Linux**: `.deb` 또는 `.AppImage`
 
             ## 자동 업데이트
             기존 사용자는 앱 내에서 자동으로 업데이트 알림을 받습니다.
