@@ -1,2 +1,6 @@
-// TODO: export { useOptions } from './model/useOptions';
-// TODO: export { OptionToggle } from './ui/OptionToggle';
+/**
+ * Toggle Option Feature Public API
+ */
+
+export { OptionToggle } from './ui/OptionToggle';
+export type { OptionToggleProps } from './ui/OptionToggle';

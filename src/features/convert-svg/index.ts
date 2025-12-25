@@ -1,2 +1,6 @@
-// TODO: export { convertSvgToTsx } from './model/convert';
-// TODO: export { ConvertButton } from './ui/ConvertButton';
+/**
+ * Convert SVG Feature Public API
+ */
+
+export { ConvertButton } from './ui/ConvertButton';
+export type { ConvertButtonProps } from './ui/ConvertButton';
