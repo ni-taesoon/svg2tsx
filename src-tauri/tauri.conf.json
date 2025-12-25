@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "svg2tsx",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "identifier": "com.taesoonpark.svg2tsx",
   "build": {
     "beforeDevCommand": "bun run dev",
@@ -19,7 +19,12 @@
         "minHeight": 398,
         "titleBarStyle": "Overlay",
         "hiddenTitle": true,
-        "backgroundColor": [47, 47, 47, 255],
+        "backgroundColor": [
+          47,
+          47,
+          47,
+          255
+        ],
         "visible": false
       }
     ],
