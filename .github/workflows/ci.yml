@@ -95,4 +95,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          tauriScript: bunx tauri
           args: --target ${{ matrix.target }}
