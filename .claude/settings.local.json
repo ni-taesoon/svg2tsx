@@ -4,7 +4,8 @@
       "Bash(lsof:*)",
       "Bash(xargs kill:*)",
       "Bash(bun run format:check:*)",
-      "Bash(bun run format:*)"
+      "Bash(bun run format:*)",
+      "Bash(bun run test:*)"
     ]
   }
 }
