@@ -6,11 +6,13 @@
 
 import { CodePreview } from '@/shared/ui';
 import { CopyCodeButton } from '@/features/copy-code';
+import { SaveFileButton } from '@/features/save-file';
 
 export interface TsxOutputPanelProps {
   code: string;
   isLoading?: boolean;
   error?: string | null;
+  defaultFileName?: string;
   className?: string;
 }
 
@@ -18,13 +20,17 @@ export const TsxOutputPanel: React.FC<TsxOutputPanelProps> = ({
   code,
   isLoading,
   error,
+  defaultFileName = 'Icon.tsx',
   className,
 }) => {
   return (
     <div className={className}>
       <div className="flex items-center justify-between mb-2 px-4 pt-4">
         <h3 className="text-sm font-medium">Output</h3>
-        <CopyCodeButton code={code} />
+        <div className="flex items-center gap-2">
+          <CopyCodeButton code={code} />
+          <SaveFileButton content={code} defaultFileName={defaultFileName} />
+        </div>
       </div>
 
       <div className="px-4 pb-4">

@@ -1,9 +1,7 @@
-use tauri::Manager;
+mod commands;
 
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
+use commands::{dialog, file_io};
+use tauri::Manager;
 
 #[cfg(target_os = "macos")]
 fn apply_macos_background(window: &tauri::WebviewWindow, r: f64, g: f64, b: f64) {
@@ -65,7 +63,16 @@ fn set_theme_color(window: tauri::WebviewWindow, r: f64, g: f64, b: f64) {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet, set_theme_color])
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
+        .invoke_handler(tauri::generate_handler![
+            set_theme_color,
+            file_io::read_svg_file,
+            file_io::save_tsx_file,
+            dialog::open_file_dialog,
+            dialog::save_file_dialog,
+        ])
         .setup(|app| {
             // 앱 시작 시 기본 배경색 설정 (다크 테마: #2f2f2f)
             #[cfg(target_os = "macos")]
