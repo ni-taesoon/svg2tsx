@@ -3,7 +3,7 @@ import { getCurrentWindow } from '@tauri-apps/api/window';
 import { MainPage } from '@/pages/main';
 import { ThemeProvider } from './providers';
 import { ThemeToggle } from '@/features/theme-toggle';
-import { Toaster } from '@/shared/ui';
+import { Toaster, SnowEffect } from '@/shared/ui';
 import './styles/globals.css';
 
 function DragRegion() {
@@ -24,6 +24,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="dark">
       <DragRegion />
+      <SnowEffect />
       <div className="fixed right-3 top-2 z-[9999]">
         <ThemeToggle />
       </div>

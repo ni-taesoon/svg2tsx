@@ -36,6 +36,29 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "category": "DeveloperTool",
+    "shortDescription": "SVG를 React TSX 컴포넌트로 변환",
+    "longDescription": "SVG2TSX는 SVG 파일을 React TSX 컴포넌트로 변환하는 데스크톱 애플리케이션입니다. 드래그 앤 드롭으로 간편하게 SVG를 가져오고, 다양한 옵션으로 TSX 컴포넌트를 생성할 수 있습니다.",
+    "copyright": "Copyright © 2024 Taesoon Park",
+    "macOS": {
+      "entitlements": null,
+      "minimumSystemVersion": "10.15"
+    },
+    "windows": {
+      "digestAlgorithm": "sha256",
+      "wix": null,
+      "nsis": {
+        "installMode": "currentUser"
+      }
+    },
+    "linux": {
+      "appimage": {
+        "bundleMediaFramework": false
+      },
+      "deb": {
+        "section": "devel"
+      }
+    }
   }
 }

@@ -117,8 +117,9 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
+
   body {
     @apply font-sans bg-background text-foreground antialiased;
     font-synthesis: none;
@@ -126,9 +127,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
   html {
     @apply font-sans;
   }
+
   html,
   body {
     margin: 0;
@@ -140,6 +143,8 @@
 /* Remove focus ring globally */
 *:focus-visible {
   outline: none !important;
+  --tw-ring-shadow: none !important;
+  box-shadow: none !important;
 }
 
 /* Custom scrollbar styles */
@@ -178,5 +183,51 @@
   height: 52px;
   -webkit-app-region: drag;
   z-index: 9998;
-  padding-left: 80px; /* macOS traffic lights */
+  padding-left: 80px;
+  /* macOS traffic lights */
+}
+
+/* Snow effect for title bar */
+.snow-container {
+  position: fixed;
+  top: 0;
+  left: 80px;
+  /* macOS traffic lights */
+  right: 0;
+  height: 52px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 9997;
+}
+
+.snowflake {
+  position: absolute;
+  top: -20px;
+  color: oklch(0.55 0.05 240 / 60%);
+  animation: snowfall linear infinite;
+  will-change: transform;
+}
+
+.dark .snowflake {
+  color: oklch(0.92 0.02 220 / 75%);
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(0) rotate(0deg) translateX(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(72px) rotate(360deg) translateX(10px);
+    opacity: 0;
+  }
 }

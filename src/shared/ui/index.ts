@@ -23,6 +23,7 @@ export {
   DropdownMenuRadioGroup,
 } from './dropdown-menu';
 export { Toaster, toast } from './toaster';
+export { SnowEffect } from './snow-effect';
 export {
   Dialog,
   DialogPortal,
