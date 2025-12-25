@@ -31,7 +31,6 @@ export const TabsContainer: React.FC<TabsContainerProps> = ({
   onTabChange,
   className,
 }) => {
-
   return (
     <Tabs value={activeTab} onValueChange={(v) => onTabChange(v as TabValue)} className={className}>
       <TabsList className="grid w-full grid-cols-3">

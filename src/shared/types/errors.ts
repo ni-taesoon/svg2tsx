@@ -26,11 +26,7 @@ export function getUserFriendlyMessage(error: AppError): string {
   }
 }
 
-export function createAppError(
-  type: ErrorType,
-  message?: string,
-  details?: string
-): AppError {
+export function createAppError(type: ErrorType, message?: string, details?: string): AppError {
   return {
     type,
     message: message ?? getUserFriendlyMessage({ type, message: '' }),

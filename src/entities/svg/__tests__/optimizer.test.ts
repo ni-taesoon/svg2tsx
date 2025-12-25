@@ -14,9 +14,9 @@ describe('optimizeSvgAst', () => {
       const optimized = optimizeSvgAst(ast, { removeDataAttrs: true });
 
       const rect = optimized.root.children[0];
-      expect(rect.attributes.find(a => a.name.startsWith('data-'))).toBeUndefined();
-      expect(rect.attributes.find(a => a.name === 'x')).toBeDefined();
-      expect(rect.attributes.find(a => a.name === 'y')).toBeDefined();
+      expect(rect.attributes.find((a) => a.name.startsWith('data-'))).toBeUndefined();
+      expect(rect.attributes.find((a) => a.name === 'x')).toBeDefined();
+      expect(rect.attributes.find((a) => a.name === 'y')).toBeDefined();
     });
 
     it('removeDataAttrs=false일 때 data-* 속성을 유지해야 함', () => {
@@ -25,7 +25,7 @@ describe('optimizeSvgAst', () => {
       const optimized = optimizeSvgAst(ast, { removeDataAttrs: false });
 
       const rect = optimized.root.children[0];
-      expect(rect.attributes.find(a => a.name === 'data-id')).toBeDefined();
+      expect(rect.attributes.find((a) => a.name === 'data-id')).toBeDefined();
     });
   });
 
@@ -37,8 +37,8 @@ describe('optimizeSvgAst', () => {
 
       const group = optimized.root.children[0];
       const rect = group.children[0];
-      expect(group.attributes.find(a => a.name === 'id')).toBeUndefined();
-      expect(rect.attributes.find(a => a.name === 'id')).toBeUndefined();
+      expect(group.attributes.find((a) => a.name === 'id')).toBeUndefined();
+      expect(rect.attributes.find((a) => a.name === 'id')).toBeUndefined();
     });
 
     it('removeIds=false일 때 id 속성을 유지해야 함', () => {
@@ -47,7 +47,7 @@ describe('optimizeSvgAst', () => {
       const optimized = optimizeSvgAst(ast, { removeIds: false });
 
       const rect = optimized.root.children[0];
-      expect(rect.attributes.find(a => a.name === 'id')).toBeDefined();
+      expect(rect.attributes.find((a) => a.name === 'id')).toBeDefined();
     });
   });
 
@@ -86,9 +86,9 @@ describe('optimizeSvgAst', () => {
       const optimized = optimizeSvgAst(ast, { removeDefaultAttrs: true });
 
       const rect = optimized.root.children[0];
-      expect(rect.attributes.find(a => a.name === 'fill')).toBeUndefined();
-      expect(rect.attributes.find(a => a.name === 'stroke')).toBeUndefined();
-      expect(rect.attributes.find(a => a.name === 'x')).toBeDefined();
+      expect(rect.attributes.find((a) => a.name === 'fill')).toBeUndefined();
+      expect(rect.attributes.find((a) => a.name === 'stroke')).toBeUndefined();
+      expect(rect.attributes.find((a) => a.name === 'x')).toBeDefined();
     });
 
     it('기본값이 아닌 경우 유지해야 함', () => {
@@ -97,8 +97,8 @@ describe('optimizeSvgAst', () => {
       const optimized = optimizeSvgAst(ast, { removeDefaultAttrs: true });
 
       const rect = optimized.root.children[0];
-      expect(rect.attributes.find(a => a.name === 'fill')?.value).toBe('red');
-      expect(rect.attributes.find(a => a.name === 'stroke')?.value).toBe('blue');
+      expect(rect.attributes.find((a) => a.name === 'fill')?.value).toBe('red');
+      expect(rect.attributes.find((a) => a.name === 'stroke')?.value).toBe('blue');
     });
   });
 
@@ -109,7 +109,7 @@ describe('optimizeSvgAst', () => {
       const optimized = optimizeSvgAst(ast, { optimizeTransforms: true });
 
       const group = optimized.root.children[0];
-      expect(group.attributes.find(a => a.name === 'transform')).toBeUndefined();
+      expect(group.attributes.find((a) => a.name === 'transform')).toBeUndefined();
     });
 
     it('optimizeTransforms=true일 때 translate(0 0)을 제거해야 함', () => {
@@ -118,7 +118,7 @@ describe('optimizeSvgAst', () => {
       const optimized = optimizeSvgAst(ast, { optimizeTransforms: true });
 
       const group = optimized.root.children[0];
-      expect(group.attributes.find(a => a.name === 'transform')).toBeUndefined();
+      expect(group.attributes.find((a) => a.name === 'transform')).toBeUndefined();
     });
 
     it('의미 있는 transform은 유지해야 함', () => {
@@ -127,7 +127,7 @@ describe('optimizeSvgAst', () => {
       const optimized = optimizeSvgAst(ast, { optimizeTransforms: true });
 
       const group = optimized.root.children[0];
-      expect(group.attributes.find(a => a.name === 'transform')).toBeDefined();
+      expect(group.attributes.find((a) => a.name === 'transform')).toBeDefined();
     });
   });
 
@@ -160,14 +160,14 @@ describe('optimizeSvgAst', () => {
 
       expect(optimized.root.children).toHaveLength(1);
       const group = optimized.root.children[0];
-      expect(group.attributes.find(a => a.name === 'id')).toBeUndefined();
-      expect(group.attributes.find(a => a.name.startsWith('data-'))).toBeUndefined();
-      expect(group.attributes.find(a => a.name === 'transform')).toBeUndefined();
+      expect(group.attributes.find((a) => a.name === 'id')).toBeUndefined();
+      expect(group.attributes.find((a) => a.name.startsWith('data-'))).toBeUndefined();
+      expect(group.attributes.find((a) => a.name === 'transform')).toBeUndefined();
 
       const rect = group.children[0];
-      expect(rect.attributes.find(a => a.name === 'fill')).toBeUndefined();
-      expect(rect.attributes.find(a => a.name === 'stroke')).toBeUndefined();
-      expect(rect.attributes.find(a => a.name === 'x')).toBeDefined();
+      expect(rect.attributes.find((a) => a.name === 'fill')).toBeUndefined();
+      expect(rect.attributes.find((a) => a.name === 'stroke')).toBeUndefined();
+      expect(rect.attributes.find((a) => a.name === 'x')).toBeDefined();
     });
 
     it('옵션이 없으면 원본을 반환해야 함', () => {
@@ -176,8 +176,8 @@ describe('optimizeSvgAst', () => {
       const optimized = optimizeSvgAst(ast);
 
       const rect = optimized.root.children[0];
-      expect(rect.attributes.find(a => a.name === 'data-id')).toBeDefined();
-      expect(rect.attributes.find(a => a.name === 'id')).toBeDefined();
+      expect(rect.attributes.find((a) => a.name === 'data-id')).toBeDefined();
+      expect(rect.attributes.find((a) => a.name === 'id')).toBeDefined();
     });
   });
 

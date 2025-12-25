@@ -8,7 +8,7 @@ import prettier from 'eslint-plugin-prettier';
 
 export default [
   {
-    ignores: ['dist/**', 'src-tauri/**', 'node_modules/**'],
+    ignores: ['dist/**', 'src-tauri/**', 'node_modules/**', 'scripts/**'],
   },
   js.configs.recommended,
   // Config files (Node.js environment)
@@ -56,10 +56,20 @@ export default [
         navigator: 'readonly',
         localStorage: 'readonly',
         console: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
         HTMLElement: 'readonly',
         HTMLButtonElement: 'readonly',
         HTMLTextAreaElement: 'readonly',
         HTMLInputElement: 'readonly',
+        HTMLDivElement: 'readonly',
+        HTMLSpanElement: 'readonly',
+        DOMParser: 'readonly',
+        Element: 'readonly',
+        Node: 'readonly',
+        KeyboardEvent: 'readonly',
         React: 'readonly',
         matchMedia: 'readonly',
       },
@@ -79,7 +89,7 @@ export default [
       'react/prop-types': 'off',
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true, allowExportNames: ['useTheme', 'buttonVariants'] },
+        { allowConstantExport: true, allowExportNames: ['useTheme', 'buttonVariants', 'toast'] },
       ],
       'prettier/prettier': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
@@ -88,6 +98,14 @@ export default [
       react: {
         version: 'detect',
       },
+    },
+  },
+  // Test files (relaxed rules)
+  {
+    files: ['src/**/__tests__/**/*.{ts,tsx}', 'src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-constant-binary-expression': 'off',
     },
   },
 ];

@@ -25,12 +25,7 @@ export const ThemeToggle: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          data-testid="theme-toggle"
-        >
+        <Button variant="ghost" size="icon" className="h-8 w-8" data-testid="theme-toggle">
           {getCurrentIcon()}
           <span className="sr-only">테마 변경</span>
         </Button>

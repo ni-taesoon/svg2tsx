@@ -7,14 +7,8 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type {
-  OptionsState,
-  ConversionOptions,
-} from './types';
-import {
-  DEFAULT_CONVERSION_OPTIONS,
-  DEFAULT_OPTIMIZER_OPTIONS,
-} from './types';
+import type { OptionsState, ConversionOptions } from './types';
+import { DEFAULT_CONVERSION_OPTIONS, DEFAULT_OPTIMIZER_OPTIONS } from './types';
 import type { OptimizerOptions } from '@/entities/svg/model/types';
 
 /**
@@ -32,9 +26,7 @@ export const useOptionsStore = create<OptionsState>()(
         set((state) => ({
           options: {
             ...state.options,
-            ...Object.fromEntries(
-              Object.entries(newOptions).filter(([_, v]) => v !== undefined)
-            ),
+            ...Object.fromEntries(Object.entries(newOptions).filter(([_, v]) => v !== undefined)),
           },
         }));
       },
@@ -43,9 +35,7 @@ export const useOptionsStore = create<OptionsState>()(
         set((state) => ({
           optimizationOptions: {
             ...state.optimizationOptions,
-            ...Object.fromEntries(
-              Object.entries(newOptions).filter(([_, v]) => v !== undefined)
-            ),
+            ...Object.fromEntries(Object.entries(newOptions).filter(([_, v]) => v !== undefined)),
           },
         }));
       },

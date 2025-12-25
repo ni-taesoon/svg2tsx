@@ -20,10 +20,7 @@ export async function readSvgFile(path: string): Promise<string> {
  * @param content TSX 코드 내용
  * @throws 파일 쓰기 실패 시 에러
  */
-export async function saveTsxFile(
-  path: string,
-  content: string
-): Promise<void> {
+export async function saveTsxFile(path: string, content: string): Promise<void> {
   try {
     await invoke<void>('save_tsx_file', { path, content });
   } catch (error) {
@@ -44,8 +41,6 @@ export async function openFileDialog(): Promise<string | null> {
  * @param defaultName 기본 파일명 (예: "Icon.tsx")
  * @returns 선택된 저장 경로 (취소 시 null)
  */
-export async function saveFileDialog(
-  defaultName: string
-): Promise<string | null> {
+export async function saveFileDialog(defaultName: string): Promise<string | null> {
   return await invoke<string | null>('save_file_dialog', { defaultName });
 }

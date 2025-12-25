@@ -27,9 +27,7 @@ export const OptionToggle: React.FC<OptionToggleProps> = ({
         <Label htmlFor={id} className="cursor-pointer">
           {label}
         </Label>
-        {description && (
-          <p className="text-xs text-muted-foreground">{description}</p>
-        )}
+        {description && <p className="text-xs text-muted-foreground">{description}</p>}
       </div>
       <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} />
     </div>

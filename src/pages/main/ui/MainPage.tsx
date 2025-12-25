@@ -10,10 +10,7 @@ import { TsxOutputPanel } from '@/widgets/tsx-output-panel';
 import { ConvertButton } from '@/features/convert-svg';
 import { ShortcutsHelpModal } from '@/features/shortcuts-help';
 import type { ConversionOptions } from '@/entities/options';
-import {
-  DEFAULT_CONVERSION_OPTIONS,
-  DEFAULT_OPTIMIZER_OPTIONS,
-} from '@/entities/options';
+import { DEFAULT_CONVERSION_OPTIONS, DEFAULT_OPTIMIZER_OPTIONS } from '@/entities/options';
 import { parseSvg, optimizeSvgAst, SvgParseError } from '@/entities/svg';
 import { generateTsx } from '@/entities/tsx';
 import { cn } from '@/shared/lib/utils';
@@ -72,9 +69,7 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
       const ast = parseSvg(svgContent);
 
       // 2. 최적화 (옵션에 따라)
-      const optimizedAst = options.optimize
-        ? optimizeSvgAst(ast, DEFAULT_OPTIMIZER_OPTIONS)
-        : ast;
+      const optimizedAst = options.optimize ? optimizeSvgAst(ast, DEFAULT_OPTIMIZER_OPTIONS) : ast;
 
       // 3. TSX 생성
       const tsxOutput = generateTsx(optimizedAst, options);
@@ -141,9 +136,7 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
         <div className="fixed inset-0 z-50 bg-primary/10 backdrop-blur-sm flex items-center justify-center pointer-events-none">
           <div className="bg-background border-2 border-dashed border-primary rounded-xl p-8 text-center">
             <p className="text-lg font-medium">SVG 파일을 여기에 놓으세요</p>
-            <p className="text-sm text-muted-foreground mt-1">
-              .svg 파일만 지원됩니다
-            </p>
+            <p className="text-sm text-muted-foreground mt-1">.svg 파일만 지원됩니다</p>
           </div>
         </div>
       )}
@@ -151,9 +144,7 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
       {/* Header - 고정 */}
       <header className="flex-shrink-0 border-b p-4">
         <h1 className="text-xl font-bold">SVG2TSX</h1>
-        <p className="text-sm text-muted-foreground">
-          Convert SVG to React TSX components
-        </p>
+        <p className="text-sm text-muted-foreground">Convert SVG to React TSX components</p>
       </header>
 
       {/* Main Content - 스크롤 영역 */}
@@ -186,10 +177,7 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
       </footer>
 
       {/* Shortcuts Help Modal */}
-      <ShortcutsHelpModal
-        open={showShortcutsHelp}
-        onOpenChange={setShowShortcutsHelp}
-      />
+      <ShortcutsHelpModal open={showShortcutsHelp} onOpenChange={setShowShortcutsHelp} />
     </div>
   );
 };

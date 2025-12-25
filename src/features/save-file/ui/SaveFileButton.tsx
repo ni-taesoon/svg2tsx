@@ -58,11 +58,7 @@ export const SaveFileButton: React.FC<SaveFileButtonProps> = ({
       disabled={!content || isSaving}
       aria-label={isSaved ? 'File saved' : 'Save as TSX file'}
     >
-      {isSaved ? (
-        <Check className="h-4 w-4" />
-      ) : (
-        <Download className="h-4 w-4" />
-      )}
+      {isSaved ? <Check className="h-4 w-4" /> : <Download className="h-4 w-4" />}
     </Button>
   );
 };

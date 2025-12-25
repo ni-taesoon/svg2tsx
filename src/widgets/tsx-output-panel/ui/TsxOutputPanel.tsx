@@ -42,9 +42,7 @@ export const TsxOutputPanel: React.FC<TsxOutputPanelProps> = ({
             {error}
           </div>
         ) : isLoading ? (
-          <div className="text-muted-foreground text-sm p-4">
-            Converting SVG to TSX...
-          </div>
+          <div className="text-muted-foreground text-sm p-4">Converting SVG to TSX...</div>
         ) : code ? (
           <CodePreview code={code} language="tsx" className="h-full" />
         ) : (

@@ -9,10 +9,7 @@ import type { SvgAst, SvgNode, SvgAttribute, OptimizerOptions } from './types';
 /**
  * SVG AST를 최적화
  */
-export function optimizeSvgAst(
-  ast: SvgAst,
-  options: OptimizerOptions = {}
-): SvgAst {
+export function optimizeSvgAst(ast: SvgAst, options: OptimizerOptions = {}): SvgAst {
   // 원본을 변경하지 않도록 깊은 복사
   const optimized: SvgAst = {
     root: optimizeNode(ast.root, options),
@@ -46,7 +43,7 @@ function optimizeNode(node: SvgNode, options: OptimizerOptions): SvgNode {
   }
 
   // 자식 노드 재귀 최적화
-  let children = node.children.map(child => optimizeNode(child, options));
+  let children = node.children.map((child) => optimizeNode(child, options));
 
   // 빈 그룹 제거
   if (options.removeEmptyGroups) {
@@ -64,14 +61,14 @@ function optimizeNode(node: SvgNode, options: OptimizerOptions): SvgNode {
  * data-* 속성 제거
  */
 function removeDataAttributes(attributes: SvgAttribute[]): SvgAttribute[] {
-  return attributes.filter(attr => !attr.name.startsWith('data-'));
+  return attributes.filter((attr) => !attr.name.startsWith('data-'));
 }
 
 /**
  * id 속성 제거
  */
 function removeIdAttributes(attributes: SvgAttribute[]): SvgAttribute[] {
-  return attributes.filter(attr => attr.name !== 'id');
+  return attributes.filter((attr) => attr.name !== 'id');
 }
 
 /**
@@ -83,7 +80,7 @@ function removeDefaultAttributes(attributes: SvgAttribute[]): SvgAttribute[] {
     stroke: ['none'],
   };
 
-  return attributes.filter(attr => {
+  return attributes.filter((attr) => {
     const defaults = defaultValues[attr.name];
     if (!defaults) return true;
     return !defaults.includes(attr.value.toLowerCase());
@@ -94,16 +91,12 @@ function removeDefaultAttributes(attributes: SvgAttribute[]): SvgAttribute[] {
  * transform 속성 최적화
  */
 function optimizeTransformAttributes(attributes: SvgAttribute[]): SvgAttribute[] {
-  return attributes.filter(attr => {
+  return attributes.filter((attr) => {
     if (attr.name !== 'transform') return true;
 
     // translate(0,0) 또는 translate(0 0) 제거
     const value = attr.value.trim();
-    if (
-      value === 'translate(0,0)' ||
-      value === 'translate(0 0)' ||
-      value === 'translate(0, 0)'
-    ) {
+    if (value === 'translate(0,0)' || value === 'translate(0 0)' || value === 'translate(0, 0)') {
       return false;
     }
 
@@ -115,7 +108,7 @@ function optimizeTransformAttributes(attributes: SvgAttribute[]): SvgAttribute[]
  * 빈 그룹 제거
  */
 function removeEmptyGroups(children: SvgNode[]): SvgNode[] {
-  return children.filter(child => {
+  return children.filter((child) => {
     // g 태그가 아니면 유지
     if (child.tagName !== 'g') return true;
 

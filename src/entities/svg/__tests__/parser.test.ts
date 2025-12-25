@@ -18,7 +18,8 @@ describe('parseSvg', () => {
     });
 
     it('메타데이터를 추출해야 함', () => {
-      const svg = '<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"></svg>';
+      const svg =
+        '<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"></svg>';
       const ast = parseSvg(svg);
 
       expect(ast.metadata.width).toBe('24');
@@ -108,7 +109,7 @@ describe('parseSvg', () => {
       const ast = parseSvg(svg);
 
       const use = ast.root.children[0];
-      expect(use.attributes.find(a => a.name === 'xlink:href')).toEqual({
+      expect(use.attributes.find((a) => a.name === 'xlink:href')).toEqual({
         name: 'xlink:href',
         value: '#icon',
       });
@@ -155,7 +156,7 @@ describe('parseSvg', () => {
       const ast = parseSvg(svg);
 
       const rect = ast.root.children[0];
-      const styleAttr = rect.attributes.find(a => a.name === 'style');
+      const styleAttr = rect.attributes.find((a) => a.name === 'style');
       expect(styleAttr?.value).toBe('fill: red; stroke: blue;');
     });
 

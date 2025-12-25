@@ -14,11 +14,7 @@ export interface CodePreviewProps {
   className?: string;
 }
 
-export const CodePreview: React.FC<CodePreviewProps> = ({
-  code,
-  language = 'tsx',
-  className,
-}) => {
+export const CodePreview: React.FC<CodePreviewProps> = ({ code, language = 'tsx', className }) => {
   const { resolvedTheme } = useTheme();
   const theme = resolvedTheme === 'dark' ? themes.vsDark : themes.vsLight;
 

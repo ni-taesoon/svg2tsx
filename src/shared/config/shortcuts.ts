@@ -51,7 +51,7 @@ export function getShortcutLabel(shortcut: Shortcut): string {
     : { ctrl: 'Ctrl', meta: 'Ctrl', alt: 'Alt', shift: 'Shift' };
 
   const parts = shortcut.modifiers
-    .filter((mod) => isMac ? true : mod !== 'meta')
+    .filter((mod) => (isMac ? true : mod !== 'meta'))
     .map((mod) => modifierLabels[mod]);
 
   const keyLabel = shortcut.key.length === 1 ? shortcut.key.toUpperCase() : shortcut.key;

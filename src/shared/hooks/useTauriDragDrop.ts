@@ -22,9 +22,7 @@ export interface UseTauriDragDropResult {
   isDragging: boolean;
 }
 
-export const useTauriDragDrop = (
-  options: UseTauriDragDropOptions = {}
-): UseTauriDragDropResult => {
+export const useTauriDragDrop = (options: UseTauriDragDropOptions = {}): UseTauriDragDropResult => {
   const { allowedExtensions = ['.svg'], onFileDrop, onError } = options;
   const [isDragging, setIsDragging] = useState(false);
 

@@ -4,10 +4,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useOptionsStore } from '../model/store';
-import {
-  DEFAULT_CONVERSION_OPTIONS,
-  DEFAULT_OPTIMIZER_OPTIONS,
-} from '../model/types';
+import { DEFAULT_CONVERSION_OPTIONS, DEFAULT_OPTIMIZER_OPTIONS } from '../model/types';
 
 describe('useOptionsStore', () => {
   beforeEach(() => {
@@ -108,8 +105,7 @@ describe('useOptionsStore', () => {
 
   describe('reset', () => {
     it('모든 옵션을 기본값으로 리셋해야 함', () => {
-      const { setOptions, setOptimizationOptions, reset } =
-        useOptionsStore.getState();
+      const { setOptions, setOptimizationOptions, reset } = useOptionsStore.getState();
 
       // 옵션 변경
       setOptions({ componentName: 'CustomIcon', typescript: false });
@@ -139,7 +135,7 @@ describe('useOptionsStore', () => {
       let callCount = 0;
       let lastState = useOptionsStore.getState();
 
-      const unsubscribe = useOptionsStore.subscribe(state => {
+      const unsubscribe = useOptionsStore.subscribe((state) => {
         callCount++;
         lastState = state;
       });

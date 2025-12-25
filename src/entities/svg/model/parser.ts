@@ -19,10 +19,7 @@ export function parseSvg(svgString: string): SvgAst {
   // xlink 네임스페이스가 없으면 추가 (jsdom 호환성)
   let processedSvg = svgString;
   if (processedSvg.includes('xlink:') && !processedSvg.includes('xmlns:xlink')) {
-    processedSvg = processedSvg.replace(
-      /<svg/,
-      '<svg xmlns:xlink="http://www.w3.org/1999/xlink"'
-    );
+    processedSvg = processedSvg.replace(/<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
   }
 
   // DOMParser로 파싱

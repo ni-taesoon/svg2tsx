@@ -84,12 +84,8 @@ export const SvgInputPanel: React.FC<SvgInputPanelProps> = ({
         />
         <div className="flex flex-col items-center gap-2 text-center pointer-events-none">
           <Upload className="h-8 w-8 text-muted-foreground" />
-          <p className="text-sm font-medium">
-            Drop SVG file here or click to upload
-          </p>
-          <p className="text-xs text-muted-foreground">
-            Supports .svg files only
-          </p>
+          <p className="text-sm font-medium">Drop SVG file here or click to upload</p>
+          <p className="text-xs text-muted-foreground">Supports .svg files only</p>
         </div>
       </div>
 

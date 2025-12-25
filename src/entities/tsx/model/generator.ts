@@ -22,10 +22,7 @@ const DEFAULT_OPTIONS: Required<GeneratorOptions> = {
 /**
  * SVG AST를 TSX 코드로 변환
  */
-export function generateTsx(
-  ast: SvgAst,
-  options: GeneratorOptions = {}
-): string {
+export function generateTsx(ast: SvgAst, options: GeneratorOptions = {}): string {
   const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
 
   // SVG 내용 생성
@@ -43,11 +40,7 @@ export function generateTsx(
 /**
  * 노드를 JSX로 변환
  */
-function nodeToJsx(
-  node: SvgNode,
-  options: Required<GeneratorOptions>,
-  depth: number
-): string {
+function nodeToJsx(node: SvgNode, options: Required<GeneratorOptions>, depth: number): string {
   const indent = '  '.repeat(depth + 2); // 컴포넌트 내부의 들여쓰기
 
   // 텍스트 노드
@@ -74,7 +67,7 @@ function nodeToJsx(
 
   // 자식 노드 변환
   const childrenJsx = node.children
-    .map(child => {
+    .map((child) => {
       if (child.type === 'text') {
         return child.textContent || '';
       }
@@ -196,10 +189,10 @@ function transformStyleValue(styleString: string): string {
   }
 
   const styles: string[] = [];
-  const declarations = trimmed.split(';').filter(s => s.trim());
+  const declarations = trimmed.split(';').filter((s) => s.trim());
 
   for (const decl of declarations) {
-    const [prop, val] = decl.split(':').map(s => s.trim());
+    const [prop, val] = decl.split(':').map((s) => s.trim());
     if (!prop || !val) continue;
 
     const camelProp = kebabToCamel(prop);

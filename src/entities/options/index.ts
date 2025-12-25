@@ -8,10 +8,7 @@
 export type { ConversionOptions, OptionsState } from './model/types';
 
 // Constants
-export {
-  DEFAULT_CONVERSION_OPTIONS,
-  DEFAULT_OPTIMIZER_OPTIONS,
-} from './model/types';
+export { DEFAULT_CONVERSION_OPTIONS, DEFAULT_OPTIMIZER_OPTIONS } from './model/types';
 
 // Store
 export { useOptionsStore } from './model/store';
