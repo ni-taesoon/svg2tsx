@@ -13,10 +13,10 @@
     "windows": [
       {
         "title": "svg2tsx",
-        "width": 900,
-        "height": 700,
+        "width": 640,
+        "height": 904,
         "minWidth": 640,
-        "minHeight": 480,
+        "minHeight": 398,
         "titleBarStyle": "Overlay",
         "hiddenTitle": true,
         "backgroundColor": [47, 47, 47, 255],
