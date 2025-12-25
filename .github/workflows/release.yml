@@ -13,8 +13,8 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  release:
-    name: Release (${{ matrix.platform }})
+  build:
+    name: Build (${{ matrix.platform }})
     permissions:
       contents: write
     strategy:
@@ -63,28 +63,154 @@ jobs:
       - name: Install frontend dependencies
         run: bun install
 
-      - name: Build and release
+      - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
+        id: tauri
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           tauriScript: bunx tauri
-          tagName: ${{ github.ref_name }}
-          releaseName: "svg2tsx ${{ github.ref_name }}"
-          releaseBody: |
+          args: --target ${{ matrix.target }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-${{ matrix.target }}
+          path: |
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.dmg
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.app.tar.gz
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.app.tar.gz.sig
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage.sig
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.msi
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.msi.sig
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.nsis.zip
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*.nsis.zip.sig
+          if-no-files-found: error
+
+  publish:
+    name: Publish to Release Repo
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Display structure of downloaded files
+        run: find artifacts -type f | head -50
+
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Prepare release files
+        id: prepare
+        run: |
+          mkdir -p release-files
+
+          # Find and copy all release files
+          find artifacts -type f \( \
+            -name "*.dmg" -o \
+            -name "*.app.tar.gz" -o \
+            -name "*.app.tar.gz.sig" -o \
+            -name "*.deb" -o \
+            -name "*.AppImage" -o \
+            -name "*.AppImage.sig" -o \
+            -name "*.msi" -o \
+            -name "*.msi.sig" -o \
+            -name "*.exe" -o \
+            -name "*.nsis.zip" -o \
+            -name "*.nsis.zip.sig" \
+          \) -exec cp {} release-files/ \;
+
+          echo "Files to release:"
+          ls -la release-files/
+
+      - name: Generate latest.json
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          REPO="ni-taesoon/svgtsx-release"
+          BASE_URL="https://github.com/${REPO}/releases/download/${{ github.ref_name }}"
+
+          # Read signatures
+          DARWIN_AARCH64_SIG=""
+          DARWIN_X64_SIG=""
+          LINUX_SIG=""
+          WINDOWS_SIG=""
+
+          if [ -f "release-files/Svg2Tsx_${VERSION}_aarch64.app.tar.gz.sig" ]; then
+            DARWIN_AARCH64_SIG=$(cat "release-files/Svg2Tsx_${VERSION}_aarch64.app.tar.gz.sig")
+          fi
+
+          if [ -f "release-files/Svg2Tsx_${VERSION}_x64.app.tar.gz.sig" ]; then
+            DARWIN_X64_SIG=$(cat "release-files/Svg2Tsx_${VERSION}_x64.app.tar.gz.sig")
+          fi
+
+          if [ -f "release-files/svg2tsx_${VERSION}_amd64.AppImage.sig" ]; then
+            LINUX_SIG=$(cat "release-files/svg2tsx_${VERSION}_amd64.AppImage.sig")
+          fi
+
+          if [ -f "release-files/Svg2Tsx_${VERSION}_x64-setup.nsis.zip.sig" ]; then
+            WINDOWS_SIG=$(cat "release-files/Svg2Tsx_${VERSION}_x64-setup.nsis.zip.sig")
+          fi
+
+          # Generate latest.json
+          cat > release-files/latest.json << EOF
+          {
+            "version": "${VERSION}",
+            "notes": "SVG2TSX ${VERSION} 릴리스",
+            "pub_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "platforms": {
+              "darwin-aarch64": {
+                "signature": "${DARWIN_AARCH64_SIG}",
+                "url": "${BASE_URL}/Svg2Tsx_${VERSION}_aarch64.app.tar.gz"
+              },
+              "darwin-x86_64": {
+                "signature": "${DARWIN_X64_SIG}",
+                "url": "${BASE_URL}/Svg2Tsx_${VERSION}_x64.app.tar.gz"
+              },
+              "linux-x86_64": {
+                "signature": "${LINUX_SIG}",
+                "url": "${BASE_URL}/svg2tsx_${VERSION}_amd64.AppImage"
+              },
+              "windows-x86_64": {
+                "signature": "${WINDOWS_SIG}",
+                "url": "${BASE_URL}/Svg2Tsx_${VERSION}_x64-setup.nsis.zip"
+              }
+            }
+          }
+          EOF
+
+          echo "Generated latest.json:"
+          cat release-files/latest.json
+
+      - name: Create release in public repo
+        uses: softprops/action-gh-release@v2
+        with:
+          repository: ni-taesoon/svgtsx-release
+          token: ${{ secrets.RELEASE_REPO_TOKEN }}
+          tag_name: ${{ github.ref_name }}
+          name: "Svg2Tsx ${{ github.ref_name }}"
+          body: |
             SVG2TSX ${{ github.ref_name }} 릴리스
 
             ## 다운로드
             - **macOS (Apple Silicon)**: `.dmg` (aarch64)
             - **macOS (Intel)**: `.dmg` (x86_64)
-            - **Windows**: `.msi` 또는 `.exe`
+            - **Windows**: `.exe` 설치 프로그램
             - **Linux**: `.deb` 또는 `.AppImage`
 
             ## 자동 업데이트
             기존 사용자는 앱 내에서 자동으로 업데이트 알림을 받습니다.
-          releaseDraft: true
+          files: release-files/*
+          draft: false
           prerelease: false
-          includeUpdaterJson: true
-          args: --target ${{ matrix.target }}
