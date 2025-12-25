@@ -6,7 +6,7 @@
 
 import { useState } from 'react';
 import { Check, Copy } from 'lucide-react';
-import { Button } from '@/shared/ui';
+import { Button, toast } from '@/shared/ui';
 import { copyToClipboard } from '../lib/clipboard';
 
 export interface CopyCodeButtonProps {
@@ -21,7 +21,10 @@ export const CopyCodeButton: React.FC<CopyCodeButtonProps> = ({ code, className 
     const success = await copyToClipboard(code);
     if (success) {
       setIsCopied(true);
+      toast.success('클립보드에 복사되었습니다');
       setTimeout(() => setIsCopied(false), 2000);
+    } else {
+      toast.error('클립보드 복사에 실패했습니다');
     }
   };
 
@@ -32,6 +35,7 @@ export const CopyCodeButton: React.FC<CopyCodeButtonProps> = ({ code, className 
       onClick={handleCopy}
       className={className}
       disabled={!code}
+      data-testid="copy-button"
       aria-label={isCopied ? 'Copied to clipboard' : 'Copy to clipboard'}
     >
       {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}

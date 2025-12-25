@@ -7,6 +7,7 @@ type Theme = 'system' | 'light' | 'dark';
 
 interface ThemeContextValue {
   theme: Theme;
+  resolvedTheme: 'light' | 'dark';
   setTheme: (theme: Theme) => void;
 }
 
@@ -102,7 +103,13 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
     };
   }, [theme]);
 
-  return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
+  const resolvedTheme = theme === 'system' ? getSystemTheme() : theme;
+
+  return (
+    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 }
 
 export function useTheme() {

@@ -110,75 +110,56 @@ export const useOptionsStore = create(
 
 ## 2. 테마 시스템 (P1)
 
-### 2.1 ThemeProvider 구현
+### 2.1 ThemeProvider (✅ 이미 구현됨)
 
-```typescript
-// src/app/providers/ThemeProvider.tsx
-type Theme = 'light' | 'dark' | 'system';
+**파일 위치**: `src/app/providers/ThemeProvider.tsx`
 
-interface ThemeContextValue {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-  isDark: boolean;
-}
+이미 구현된 기능:
+- localStorage 저장 (`svg2tsx-theme`)
+- 시스템 테마 감지 (`prefers-color-scheme`)
+- Tauri 네이티브 배경색 연동 (`set_theme_color` Rust 명령어)
+- 창 초기화 시 테마 적용 후 표시
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    return (localStorage.getItem('theme') as Theme) || 'dark';
-  });
+### 2.2 테마 토글 버튼 (🔄 UI 개선 필요)
 
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.remove('light', 'dark');
-
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches ? 'dark' : 'light';
-      root.classList.add(systemTheme);
-    } else {
-      root.classList.add(theme);
-    }
-
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const isDark = theme === 'dark' ||
-    (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-
-  return (
-    <ThemeContext.Provider value={{ theme, setTheme, isDark }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
-```
-
-### 2.2 테마 토글 버튼
+**현재 상태**: `src/app/App.tsx`에 3개 버튼 방식으로 구현됨
+**개선 방향**: 아이콘 + 드롭다운 메뉴 스타일로 변경
 
 ```typescript
 // src/features/theme-toggle/ui/ThemeToggle.tsx
+import { Sun, Moon, Monitor } from 'lucide-react';
+import { Button } from '@/shared/ui';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui';
+import { useTheme } from '@/app/providers';
+
 export const ThemeToggle: React.FC = () => {
   const { theme, setTheme } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" className="h-8 w-8">
           <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">테마 변경</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme('light')}>
+          <Sun className="mr-2 h-4 w-4" />
           Light
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('dark')}>
+          <Moon className="mr-2 h-4 w-4" />
           Dark
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('system')}>
+          <Monitor className="mr-2 h-4 w-4" />
           System
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -188,10 +169,12 @@ export const ThemeToggle: React.FC = () => {
 ```
 
 **체크리스트**:
-- [ ] ThemeProvider 구현
-- [ ] localStorage 저장
-- [ ] 시스템 테마 감지
-- [ ] 테마 토글 UI
+- [x] ThemeProvider 구현
+- [x] localStorage 저장
+- [x] 시스템 테마 감지
+- [ ] 테마 토글 UI 개선 (아이콘 + 드롭다운)
+- [ ] DropdownMenu 컴포넌트 추가 (shadcn/ui)
+- [ ] App.tsx에서 기존 ThemeToggle 교체
 
 ---
 
@@ -559,16 +542,17 @@ pnpm test:e2e:ui  # UI 모드
 ## 구현 순서
 
 ### 1단계: 기본 UX 개선 (P1)
-1. 에러 핸들링 및 Toast
-2. 테마 시스템
-3. 변환 옵션 저장
+1. ~~테마 시스템~~ (✅ ThemeProvider 구현 완료)
+2. 테마 토글 UI 개선 (아이콘 + 드롭다운)
+3. 에러 핸들링 및 Toast
+4. 변환 옵션 저장
 
 ### 2단계: 고급 기능 (P2)
-4. 단축키 시스템
-5. 히스토리 기능
+5. 단축키 시스템
+6. 히스토리 기능
 
 ### 3단계: 품질 보증 (P2)
-6. E2E 테스트 작성
+7. E2E 테스트 작성
 
 ---
 
@@ -577,7 +561,8 @@ pnpm test:e2e:ui  # UI 모드
 ### P1 (필수)
 - [ ] 변환 옵션 localStorage 저장
 - [ ] 에러 Toast 알림
-- [ ] 다크/라이트 테마 전환
+- [x] 다크/라이트 테마 전환 (ThemeProvider 구현 완료)
+- [ ] 테마 토글 UI 개선 (아이콘 + 드롭다운)
 
 ### P2 (선택)
 - [ ] 단축키 동작

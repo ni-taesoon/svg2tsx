@@ -6,7 +6,7 @@
 
 import { useState } from 'react';
 import { Check, Download } from 'lucide-react';
-import { Button } from '@/shared/ui';
+import { Button, toast } from '@/shared/ui';
 import { saveFileDialog, saveTsxFile } from '@/shared/api';
 
 export interface SaveFileButtonProps {
@@ -22,13 +22,11 @@ export const SaveFileButton: React.FC<SaveFileButtonProps> = ({
 }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleSave = async () => {
     if (!content) return;
 
     setIsSaving(true);
-    setError(null);
 
     try {
       const savePath = await saveFileDialog(defaultFileName);
@@ -40,35 +38,31 @@ export const SaveFileButton: React.FC<SaveFileButtonProps> = ({
 
       await saveTsxFile(savePath, content);
       setIsSaved(true);
+      toast.success('파일이 저장되었습니다');
       setTimeout(() => setIsSaved(false), 2000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save file');
+      toast.error('파일 저장에 실패했습니다', {
+        description: err instanceof Error ? err.message : undefined,
+      });
     } finally {
       setIsSaving(false);
     }
   };
 
   return (
-    <div className="relative">
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={handleSave}
-        className={className}
-        disabled={!content || isSaving}
-        aria-label={isSaved ? 'File saved' : 'Save as TSX file'}
-      >
-        {isSaved ? (
-          <Check className="h-4 w-4" />
-        ) : (
-          <Download className="h-4 w-4" />
-        )}
-      </Button>
-      {error && (
-        <span className="absolute top-full left-0 mt-1 text-xs text-destructive whitespace-nowrap">
-          {error}
-        </span>
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={handleSave}
+      className={className}
+      disabled={!content || isSaving}
+      aria-label={isSaved ? 'File saved' : 'Save as TSX file'}
+    >
+      {isSaved ? (
+        <Check className="h-4 w-4" />
+      ) : (
+        <Download className="h-4 w-4" />
       )}
-    </div>
+    </Button>
   );
 };

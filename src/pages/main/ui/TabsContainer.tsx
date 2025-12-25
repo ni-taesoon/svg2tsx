@@ -4,18 +4,21 @@
  * Input, Preview, Options 탭을 관리하는 컨테이너
  */
 
-import { useState } from 'react';
 import { FileInput, Eye, Settings } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui';
 import { SvgInputPanel } from '@/widgets/svg-input-panel';
 import { OptionsPanel } from '@/widgets/options-panel';
 import type { ConversionOptions } from '@/entities/options';
 
+export type TabValue = 'input' | 'preview' | 'options';
+
 export interface TabsContainerProps {
   svgContent: string;
   onSvgContentChange: (content: string) => void;
   options: ConversionOptions;
   onOptionsChange: (options: Partial<ConversionOptions>) => void;
+  activeTab: TabValue;
+  onTabChange: (tab: TabValue) => void;
   className?: string;
 }
 
@@ -24,12 +27,13 @@ export const TabsContainer: React.FC<TabsContainerProps> = ({
   onSvgContentChange,
   options,
   onOptionsChange,
+  activeTab,
+  onTabChange,
   className,
 }) => {
-  const [activeTab, setActiveTab] = useState('input');
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className={className}>
+    <Tabs value={activeTab} onValueChange={(v) => onTabChange(v as TabValue)} className={className}>
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="input">
           <FileInput className="mr-2 h-4 w-4" />

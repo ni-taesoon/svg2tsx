@@ -108,7 +108,7 @@ export const SvgInputPanel: React.FC<SvgInputPanelProps> = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Paste SVG code here..."
-        className="min-h-[300px] font-mono text-sm"
+        className="min-h-[300px] text-sm resize-none"
         aria-label="SVG code input"
       />
     </div>

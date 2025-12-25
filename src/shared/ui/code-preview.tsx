@@ -6,6 +6,7 @@
 
 import { Highlight, themes } from 'prism-react-renderer';
 import { cn } from '@/shared/lib/utils';
+import { useTheme } from '@/app/providers';
 
 export interface CodePreviewProps {
   code: string;
@@ -18,13 +19,16 @@ export const CodePreview: React.FC<CodePreviewProps> = ({
   language = 'tsx',
   className,
 }) => {
+  const { resolvedTheme } = useTheme();
+  const theme = resolvedTheme === 'dark' ? themes.vsDark : themes.vsLight;
+
   return (
-    <Highlight theme={themes.vsDark} code={code} language={language}>
+    <Highlight theme={theme} code={code} language={language}>
       {({ className: highlightClassName, style, tokens, getLineProps, getTokenProps }) => (
         <pre
           className={cn(
             highlightClassName,
-            'rounded-lg p-4 overflow-auto text-sm font-mono max-h-[500px]',
+            'rounded-lg p-4 overflow-auto text-sm font-mono',
             className
           )}
           style={style}
