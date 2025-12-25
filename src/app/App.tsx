@@ -16,7 +16,7 @@ function DragRegion() {
   };
 
   return (
-    <div className="drag-region" onMouseDown={handleDragStart} onDoubleClick={handleDoubleClick} />
+    <div className="drag-region cursor-default" onMouseDown={handleDragStart} onDoubleClick={handleDoubleClick} />
   );
 }
 
