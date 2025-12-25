@@ -8,10 +8,15 @@ SVG를 React TSX 컴포넌트로 변환하는 데스크톱 애플리케이션(Ta
 
 ### 완료된 작업
 
-#### 1. Task 01: 프로젝트 초기 설정 (부분 완료)
+#### 1. Task 01: 프로젝트 초기 설정 (완료)
 - bun으로 Tauri v2 프로젝트 설정 완료
 - Custom title bar 적용 (`titleBarStyle: "Overlay"`)
 - 다크/라이트 테마 시스템 적용 (ThemeProvider)
+- FSD 폴더 구조 생성 완료 (app/pages/widgets/features/entities/shared)
+- Tailwind CSS 4 + shadcn/ui 설정 완료 (button, tabs, textarea, switch)
+- ESLint 9 (flat config) + Prettier 설정 완료
+- Vitest 테스트 환경 설정 완료
+- Path alias 설정 완료 (@/app, @/pages 등)
 
 #### 2. PRD 문서 작성 및 업데이트 (`docs/PRD.md`)
 - 테크스택 분리 (Frontend, Desktop Runtime, 개발 도구, 핵심 라이브러리)
@@ -68,18 +73,7 @@ SVG를 React TSX 컴포넌트로 변환하는 데스크톱 애플리케이션(Ta
 
 ### 즉시 수행 (Phase 1: MVP)
 
-1. **Task 01 완료**: 프로젝트 초기 설정 (진행 중)
-   ```bash
-   # docs/tasks/task-01-setup.md 참조
-   # ✅ bun으로 Tauri 프로젝트 생성
-   # ✅ Custom title bar 적용
-   # ✅ 테마 시스템 적용
-   # ⬜ FSD 폴더 구조 생성
-   # ⬜ shadcn/ui + Tailwind CSS 설정
-   # ⬜ ESLint + Prettier + Vitest 설정
-   ```
-
-2. **Task 02 실행**: 핵심 변환 로직 (TDD)
+1. **Task 02 실행**: 핵심 변환 로직 (TDD)
    ```bash
    # docs/tasks/task-02-core-logic.md 참조
    # entities/svg - parser, optimizer
@@ -87,7 +81,6 @@ SVG를 React TSX 컴포넌트로 변환하는 데스크톱 애플리케이션(Ta
    # 테스트 먼저 작성 후 구현
    ```
 
-3. **Task 03 실행**: 기본 UI
    ```bash
    # docs/tasks/task-03-ui-layout.md 참조
    # pages/main, widgets, features
@@ -135,4 +128,4 @@ cd /Users/taesoonpark/workspace/svg2tsx
 ---
 
 **Last Updated**: 2025-12-25
-**Session Context**: Task 01 진행 중 (bun 프로젝트 설정, custom title bar, 테마 적용 완료)
+**Session Context**: Task 01 완료! 다음은 Task 02 (SVG/TSX 변환 핵심 로직) 또는 Task 03 (기본 UI) 진행
