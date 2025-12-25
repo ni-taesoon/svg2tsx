@@ -1,0 +1,15 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="200" fill="#0f172a"/>
+
+  <!-- S letter (left) -->
+  <path d="M200 380C200 320 260 280 340 280C420 280 480 320 480 380C480 440 420 470 340 500C260 530 200 560 200 620C200 680 260 720 340 720C420 720 480 680 480 620"
+        stroke="#38bdf8" stroke-width="52" stroke-linecap="round" fill="none"/>
+
+  <!-- Arrow -->
+  <path d="M520 512H700" stroke="#94a3b8" stroke-width="40" stroke-linecap="round"/>
+  <path d="M660 460L720 512L660 564" stroke="#94a3b8" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- T letter (right) -->
+  <path d="M760 280H920M840 280V720" stroke="#a78bfa" stroke-width="52" stroke-linecap="round"/>
+</svg>

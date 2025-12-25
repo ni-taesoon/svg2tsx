@@ -1,0 +1,12 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="220" fill="#18181b"/>
+
+  <!-- Abstract transform symbol -->
+  <circle cx="350" cy="512" r="140" stroke="#22d3ee" stroke-width="56" fill="none"/>
+  <circle cx="674" cy="512" r="140" stroke="#a855f7" stroke-width="56" fill="none"/>
+
+  <!-- Connecting arrow -->
+  <path d="M490 512H534" stroke="#f8fafc" stroke-width="48" stroke-linecap="round"/>
+  <path d="M510 470L558 512L510 554" stroke="#f8fafc" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

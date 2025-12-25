@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "svg2tsx",
+  "productName": "Svg2Tsx",
   "version": "0.1.4",
   "identifier": "com.taesoonpark.svg2tsx",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "svg2tsx",
+        "title": "Svg2Tsx",
         "width": 640,
         "height": 904,
         "minWidth": 640,

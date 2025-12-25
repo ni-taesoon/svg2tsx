@@ -14,7 +14,10 @@
       "Bash(gh run list:*)",
       "Bash(git tag:*)",
       "Bash(git push:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(brew install:*)",
+      "Bash(rsvg-convert:*)",
+      "Bash(bun tauri icon:*)"
     ]
   }
 }
