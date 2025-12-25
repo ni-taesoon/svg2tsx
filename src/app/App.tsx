@@ -1,5 +1,6 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
 
+import { MainPage } from '@/pages/main';
 import { ThemeProvider, useTheme } from './providers';
 import './styles/globals.css';
 
@@ -44,9 +45,7 @@ function App() {
     <ThemeProvider defaultTheme="dark">
       <DragRegion />
       <ThemeToggle />
-      <main className="flex h-screen w-screen items-center justify-center pt-[52px]">
-        <h1 className="text-4xl font-bold">SVG2TSX</h1>
-      </main>
+      <MainPage className="pt-[52px]" />
     </ThemeProvider>
   );
 }

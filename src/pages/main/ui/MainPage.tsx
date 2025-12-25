@@ -9,7 +9,12 @@ import { TabsContainer } from './TabsContainer';
 import { TsxOutputPanel } from '@/widgets/tsx-output-panel';
 import { ConvertButton } from '@/features/convert-svg';
 import type { ConversionOptions } from '@/entities/options';
-import { DEFAULT_CONVERSION_OPTIONS } from '@/entities/options';
+import {
+  DEFAULT_CONVERSION_OPTIONS,
+  DEFAULT_OPTIMIZER_OPTIONS,
+} from '@/entities/options';
+import { parseSvg, optimizeSvgAst, SvgParseError } from '@/entities/svg';
+import { generateTsx } from '@/entities/tsx';
 import { cn } from '@/shared/lib/utils';
 
 export interface MainPageProps {
@@ -37,31 +42,23 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
     setError(null);
 
     try {
-      // TODO: Task02 완료 후 실제 변환 로직으로 대체
-      // const ast = parseSvg(svgContent);
-      // const optimizedAst = options.optimize ? optimizeSvgAst(ast) : ast;
-      // const output = generateTsx(optimizedAst, options);
-      // setTsxCode(output.code);
+      // 1. SVG 파싱
+      const ast = parseSvg(svgContent);
 
-      // Mock 구현 (Task02 완료 전까지 사용)
-      await new Promise((resolve) => setTimeout(resolve, 500)); // 로딩 시뮬레이션
-      const mockTsxCode = `export const ${options.componentName}${
-        options.typescript ? ': React.FC<React.SVGProps<SVGSVGElement>>' : ''
-      } = (${options.spreadProps ? 'props' : ''}) => {
-  return (
-    <svg${options.spreadProps ? ' {...props}' : ''}>
-      {/* Mock TSX output */}
-      {/* SVG content will be transformed here */}
-    </svg>
-  );
-};${
-        options.useMemo
-          ? `\n\nexport default React.memo(${options.componentName});`
-          : ''
-      }`;
-      setTsxCode(mockTsxCode);
+      // 2. 최적화 (옵션에 따라)
+      const optimizedAst = options.optimize
+        ? optimizeSvgAst(ast, DEFAULT_OPTIMIZER_OPTIONS)
+        : ast;
+
+      // 3. TSX 생성
+      const tsxOutput = generateTsx(optimizedAst, options);
+      setTsxCode(tsxOutput);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to convert SVG');
+      if (err instanceof SvgParseError) {
+        setError(`SVG 파싱 에러: ${err.message}`);
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to convert SVG');
+      }
     } finally {
       setIsLoading(false);
     }
