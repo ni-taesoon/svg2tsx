@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useAutoUpdate } from '@/app/hooks/useAutoUpdate';
 
 export function UpdateBanner() {
-  const { update, downloading, progress, installUpdate, error } =
-    useAutoUpdate();
+  const { update, downloading, progress, installUpdate, error } = useAutoUpdate();
   const [dismissed, setDismissed] = useState(false);
 
   // 업데이트가 없거나 사용자가 닫았으면 렌더링 안 함
@@ -12,14 +11,10 @@ export function UpdateBanner() {
   return (
     <div className="fixed bottom-4 right-4 z-50 w-80 rounded-lg bg-blue-600 p-4 text-white shadow-lg dark:bg-blue-700">
       <div className="font-medium">새 버전 사용 가능</div>
-      <div className="mt-1 text-sm opacity-90">
-        v{update.version} 버전이 준비되었습니다.
-      </div>
+      <div className="mt-1 text-sm opacity-90">v{update.version} 버전이 준비되었습니다.</div>
 
       {error && (
-        <div className="mt-2 rounded bg-red-500/20 px-2 py-1 text-xs text-red-100">
-          {error}
-        </div>
+        <div className="mt-2 rounded bg-red-500/20 px-2 py-1 text-xs text-red-100">{error}</div>
       )}
 
       {downloading ? (

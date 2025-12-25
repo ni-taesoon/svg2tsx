@@ -26,8 +26,7 @@ export function useAutoUpdate() {
       setState((prev) => ({ ...prev, update: available, checking: false }));
       return available;
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : '업데이트 확인 실패';
+      const message = error instanceof Error ? error.message : '업데이트 확인 실패';
       setState((prev) => ({ ...prev, error: message, checking: false }));
       console.error('업데이트 확인 실패:', error);
       return null;
@@ -62,8 +61,7 @@ export function useAutoUpdate() {
 
       await relaunch();
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : '업데이트 설치 실패';
+      const message = error instanceof Error ? error.message : '업데이트 설치 실패';
       setState((prev) => ({
         ...prev,
         error: message,
@@ -73,8 +71,9 @@ export function useAutoUpdate() {
     }
   }, [state.update]);
 
-  // 앱 시작 시 자동으로 업데이트 확인
+  // 앱 시작 시 자동으로 업데이트 확인 (비동기 함수이므로 cascading render 문제 없음)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- checkForUpdates는 비동기 함수
     checkForUpdates();
   }, [checkForUpdates]);
 
