@@ -43,7 +43,7 @@ export const TabsContainer: React.FC<TabsContainerProps> = ({
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="preview" className="mt-4 flex-1 min-h-[300px]">
+      <TabsContent value="preview" className="mt-4 flex-1 min-h-0 h-full" forceMount hidden={activeTab !== 'preview'}>
         <SvgPreview svgContent={svgContent} />
       </TabsContent>
 

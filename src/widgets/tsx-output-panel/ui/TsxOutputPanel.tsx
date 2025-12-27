@@ -44,9 +44,7 @@ export const TsxOutputPanel: React.FC<TsxOutputPanelProps> = ({
         ) : isLoading ? (
           <div className="text-muted-foreground text-sm p-4">Converting SVG to TSX...</div>
         ) : code ? (
-          <div className="h-full overflow-auto">
-            <CodePreview code={code} language="tsx" />
-          </div>
+          <CodePreview code={code} language="tsx" className="h-full" />
         ) : (
           <div className="text-muted-foreground text-sm p-4 border border-dashed rounded-lg">
             No output yet. Convert SVG to see the result.
