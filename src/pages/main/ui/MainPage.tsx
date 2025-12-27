@@ -14,13 +14,7 @@ import { DEFAULT_CONVERSION_OPTIONS, DEFAULT_OPTIMIZER_OPTIONS } from '@/entitie
 import { parseSvg, optimizeSvgAst, SvgParseError } from '@/entities/svg';
 import { generateTsx } from '@/entities/tsx';
 import { cn } from '@/shared/lib/utils';
-import {
-  Button,
-  toast,
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle,
-} from '@/shared/ui';
+import { Button, toast, ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/shared/ui';
 import { useKeyboardShortcuts, useTauriDragDrop } from '@/shared/hooks';
 import { copyToClipboard } from '@/features/copy-code/lib/clipboard';
 import { saveFileDialog, saveTsxFile } from '@/shared/api';

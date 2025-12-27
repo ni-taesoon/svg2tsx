@@ -31,7 +31,11 @@ export const TabsContainer: React.FC<TabsContainerProps> = ({
   className,
 }) => {
   return (
-    <Tabs value={activeTab} onValueChange={(v) => onTabChange(v as TabValue)} className={cn('flex flex-col h-full', className)}>
+    <Tabs
+      value={activeTab}
+      onValueChange={(v) => onTabChange(v as TabValue)}
+      className={cn('flex flex-col h-full', className)}
+    >
       <TabsList className="grid w-full grid-cols-2 flex-shrink-0">
         <TabsTrigger value="preview">
           <Eye className="mr-2 h-4 w-4" />
@@ -43,7 +47,12 @@ export const TabsContainer: React.FC<TabsContainerProps> = ({
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="preview" className="mt-4 flex-1 min-h-0 h-full" forceMount hidden={activeTab !== 'preview'}>
+      <TabsContent
+        value="preview"
+        className="mt-4 flex-1 min-h-0 h-full"
+        forceMount
+        hidden={activeTab !== 'preview'}
+      >
         <SvgPreview svgContent={svgContent} />
       </TabsContent>
 

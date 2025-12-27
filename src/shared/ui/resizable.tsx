@@ -30,20 +30,15 @@ const ResizablePanelGroup = ({
   />
 );
 
-const ResizablePanel = ({
-  className,
-  ...props
-}: PanelProps) => <Panel className={className} {...props} />;
+const ResizablePanel = ({ className, ...props }: PanelProps) => (
+  <Panel className={className} {...props} />
+);
 
 type ResizableHandleProps = Omit<SeparatorProps, 'children'> & {
   withHandle?: boolean;
 };
 
-const ResizableHandle = ({
-  withHandle,
-  className,
-  ...props
-}: ResizableHandleProps) => (
+const ResizableHandle = ({ withHandle, className, ...props }: ResizableHandleProps) => (
   <Separator
     className={cn(
       'relative flex items-center justify-center bg-border transition-colors',
