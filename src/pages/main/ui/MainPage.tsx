@@ -149,8 +149,8 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
 
       {/* Main Content - 스크롤 영역 */}
       <main className="flex-1 flex flex-col min-h-0">
-        {/* Tabs Area - 스크롤 가능 */}
-        <div className="flex-1 overflow-auto p-4 min-h-0">
+        {/* Tabs Area - 스크롤 가능 (overflow-y-scroll로 항상 스크롤바 공간 확보) */}
+        <div className="flex-1 overflow-x-hidden overflow-y-scroll py-4 pl-4 pr-2 min-h-0">
           <TabsContainer
             svgContent={svgContent}
             onSvgContentChange={setSvgContent}
