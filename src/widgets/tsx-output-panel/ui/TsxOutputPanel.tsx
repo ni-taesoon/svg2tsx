@@ -36,15 +36,17 @@ export const TsxOutputPanel: React.FC<TsxOutputPanelProps> = ({
       </div>
 
       {/* Content - 스크롤 가능 */}
-      <div className="flex-1 min-h-0 px-4 pb-3">
+      <div className="flex-1 min-h-0 px-4 pb-3 overflow-hidden">
         {error ? (
-          <div className="text-destructive text-sm p-4 border border-destructive rounded-lg bg-destructive/10">
+          <div className="text-destructive text-sm p-4 border border-destructive rounded-lg bg-destructive/10 overflow-auto h-full">
             {error}
           </div>
         ) : isLoading ? (
           <div className="text-muted-foreground text-sm p-4">Converting SVG to TSX...</div>
         ) : code ? (
-          <CodePreview code={code} language="tsx" className="h-full" />
+          <div className="h-full overflow-auto">
+            <CodePreview code={code} language="tsx" />
+          </div>
         ) : (
           <div className="text-muted-foreground text-sm p-4 border border-dashed rounded-lg">
             No output yet. Convert SVG to see the result.

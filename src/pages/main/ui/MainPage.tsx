@@ -14,7 +14,13 @@ import { DEFAULT_CONVERSION_OPTIONS, DEFAULT_OPTIMIZER_OPTIONS } from '@/entitie
 import { parseSvg, optimizeSvgAst, SvgParseError } from '@/entities/svg';
 import { generateTsx } from '@/entities/tsx';
 import { cn } from '@/shared/lib/utils';
-import { Button, toast } from '@/shared/ui';
+import {
+  Button,
+  toast,
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from '@/shared/ui';
 import { useKeyboardShortcuts, useTauriDragDrop } from '@/shared/hooks';
 import { copyToClipboard } from '@/features/copy-code/lib/clipboard';
 import { saveFileDialog, saveTsxFile } from '@/shared/api';
@@ -178,23 +184,30 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
         />
       </header>
 
-      {/* Main Content - 스크롤 영역 */}
+      {/* Main Content - Resizable Panels */}
       <main className="flex-1 flex flex-col min-h-0">
-        {/* Tabs Area - 스크롤 가능 (overflow-y-scroll로 항상 스크롤바 공간 확보) */}
-        <div className="flex-1 overflow-x-hidden overflow-y-scroll py-4 pl-4 pr-2 min-h-0">
-          <TabsContainer
-            svgContent={svgContent}
-            options={options}
-            onOptionsChange={handleOptionsChange}
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-          />
-        </div>
+        <ResizablePanelGroup direction="vertical" className="flex-1">
+          {/* Preview/Options Panel */}
+          <ResizablePanel defaultSize="75%" minSize="300px" className="min-h-0">
+            <div className="h-full overflow-x-hidden overflow-y-scroll py-4 pl-4 pr-2">
+              <TabsContainer
+                svgContent={svgContent}
+                options={options}
+                onOptionsChange={handleOptionsChange}
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+              />
+            </div>
+          </ResizablePanel>
 
-        {/* Output Area - 고정 높이 */}
-        <div className="flex-shrink-0 border-t h-[200px] overflow-hidden">
-          <TsxOutputPanel code={tsxCode} isLoading={isLoading} error={error} className="h-full" />
-        </div>
+          {/* Resize Handle */}
+          <ResizableHandle withHandle />
+
+          {/* Output Panel */}
+          <ResizablePanel defaultSize="25%" minSize="200px" className="min-h-0">
+            <TsxOutputPanel code={tsxCode} isLoading={isLoading} error={error} className="h-full" />
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </main>
 
       {/* Shortcuts Help Modal */}
