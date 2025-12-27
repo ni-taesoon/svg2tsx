@@ -21,7 +21,7 @@ export const OptionsPanel: React.FC<OptionsPanelProps> = ({
 }) => {
   return (
     <div className={className}>
-      <div className="space-y-6">
+      <div className="space-y-6 mb-8">
         {/* Component Name */}
         <div className="space-y-2">
           <Label htmlFor="componentName">Component Name</Label>
