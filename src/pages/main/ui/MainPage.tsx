@@ -5,6 +5,7 @@
  */
 
 import { useState, useCallback, useRef } from 'react';
+import { FileInput } from 'lucide-react';
 import { TabsContainer, type TabValue } from './TabsContainer';
 import { TsxOutputPanel } from '@/widgets/tsx-output-panel';
 import { ConvertButton } from '@/features/convert-svg';
@@ -14,7 +15,7 @@ import { DEFAULT_CONVERSION_OPTIONS, DEFAULT_OPTIMIZER_OPTIONS } from '@/entitie
 import { parseSvg, optimizeSvgAst, SvgParseError } from '@/entities/svg';
 import { generateTsx } from '@/entities/tsx';
 import { cn } from '@/shared/lib/utils';
-import { toast } from '@/shared/ui';
+import { Button, toast } from '@/shared/ui';
 import { useKeyboardShortcuts, useTauriDragDrop } from '@/shared/hooks';
 import { copyToClipboard } from '@/features/copy-code/lib/clipboard';
 import { saveFileDialog, saveTsxFile } from '@/shared/api';
@@ -29,9 +30,10 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [options, setOptions] = useState<ConversionOptions>(DEFAULT_CONVERSION_OPTIONS);
-  const [activeTab, setActiveTab] = useState<TabValue>('input');
+  const [activeTab, setActiveTab] = useState<TabValue>('preview');
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
   const saveInProgressRef = useRef(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleOptionsChange = useCallback((newOptions: Partial<ConversionOptions>) => {
     setOptions((prev) => ({ ...prev, ...newOptions }));
@@ -42,7 +44,6 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
     allowedExtensions: ['.svg'],
     onFileDrop: (content, fileName) => {
       setSvgContent(content);
-      setActiveTab('input');
       // 파일명에서 컴포넌트 이름 추출
       const componentName = fileName.replace(/\.svg$/i, '');
       if (componentName) {
@@ -54,6 +55,22 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
       toast.error(err.message);
     },
   });
+
+  // 파일 선택 핸들러
+  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.name.endsWith('.svg')) {
+      file.text().then((content) => {
+        setSvgContent(content);
+        const componentName = file.name.replace(/\.svg$/i, '');
+        if (componentName) {
+          setOptions((prev) => ({ ...prev, componentName }));
+        }
+        toast.success(`${file.name} 파일이 로드되었습니다`);
+      });
+    }
+    e.target.value = ''; // 같은 파일 재선택 허용
+  }, []);
 
   const handleConvert = useCallback(async () => {
     if (!svgContent.trim()) {
@@ -121,7 +138,7 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
 
   // 키보드 단축키 설정
   useKeyboardShortcuts({
-    onSwitchToInput: () => setActiveTab('input'),
+    onSwitchToInput: () => fileInputRef.current?.click(),
     onSwitchToPreview: () => setActiveTab('preview'),
     onSwitchToOptions: () => setActiveTab('options'),
     onSave: handleSave,
@@ -142,9 +159,22 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
       )}
 
       {/* Header - 고정 */}
-      <header className="flex-shrink-0 border-b p-4">
-        <h1 className="text-xl font-bold">SVG2TSX</h1>
-        <p className="text-sm text-muted-foreground">Convert SVG to React TSX components</p>
+      <header className="flex-shrink-0 border-b p-4 flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold">SVG2TSX</h1>
+          <p className="text-sm text-muted-foreground">Convert SVG to React TSX components</p>
+        </div>
+        <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
+          <FileInput className="mr-2 h-4 w-4" />
+          Input
+        </Button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".svg"
+          onChange={handleFileSelect}
+          className="hidden"
+        />
       </header>
 
       {/* Main Content - 스크롤 영역 */}
@@ -153,7 +183,6 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
         <div className="flex-1 overflow-x-hidden overflow-y-scroll py-4 pl-4 pr-2 min-h-0">
           <TabsContainer
             svgContent={svgContent}
-            onSvgContentChange={setSvgContent}
             options={options}
             onOptionsChange={handleOptionsChange}
             activeTab={activeTab}

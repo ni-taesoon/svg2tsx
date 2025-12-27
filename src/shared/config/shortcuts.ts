@@ -12,7 +12,7 @@ export const SHORTCUTS = {
   SWITCH_TO_INPUT: {
     key: '1',
     modifiers: ['ctrl', 'meta'] as const,
-    description: 'Input 탭으로 이동',
+    description: '파일 선택창 열기',
   },
   SWITCH_TO_PREVIEW: {
     key: '2',
