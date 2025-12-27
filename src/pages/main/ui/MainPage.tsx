@@ -4,11 +4,10 @@
  * SVG2TSX 애플리케이션의 메인 화면
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { FileInput } from 'lucide-react';
 import { TabsContainer, type TabValue } from './TabsContainer';
 import { TsxOutputPanel } from '@/widgets/tsx-output-panel';
-import { ConvertButton } from '@/features/convert-svg';
 import { ShortcutsHelpModal } from '@/features/shortcuts-help';
 import type { ConversionOptions } from '@/entities/options';
 import { DEFAULT_CONVERSION_OPTIONS, DEFAULT_OPTIMIZER_OPTIONS } from '@/entities/options';
@@ -72,9 +71,11 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
     e.target.value = ''; // 같은 파일 재선택 허용
   }, []);
 
-  const handleConvert = useCallback(async () => {
+  // 자동 변환 (svgContent 또는 options 변경 시)
+  useEffect(() => {
     if (!svgContent.trim()) {
-      setError('Please provide SVG content');
+      setTsxCode('');
+      setError(null);
       return;
     }
 
@@ -195,15 +196,6 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
           <TsxOutputPanel code={tsxCode} isLoading={isLoading} error={error} className="h-full" />
         </div>
       </main>
-
-      {/* Footer Actions - 고정 */}
-      <footer className="flex-shrink-0 border-t p-4 flex gap-2 justify-end bg-secondary/50">
-        <ConvertButton
-          onClick={handleConvert}
-          isLoading={isLoading}
-          disabled={!svgContent.trim()}
-        />
-      </footer>
 
       {/* Shortcuts Help Modal */}
       <ShortcutsHelpModal open={showShortcutsHelp} onOpenChange={setShowShortcutsHelp} />

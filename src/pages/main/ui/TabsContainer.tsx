@@ -7,7 +7,9 @@
 import { Eye, Settings } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui';
 import { OptionsPanel } from '@/widgets/options-panel';
+import { cn } from '@/shared/lib/utils';
 import type { ConversionOptions } from '@/entities/options';
+import { SvgPreview } from './SvgPreview';
 
 export type TabValue = 'preview' | 'options';
 
@@ -29,8 +31,8 @@ export const TabsContainer: React.FC<TabsContainerProps> = ({
   className,
 }) => {
   return (
-    <Tabs value={activeTab} onValueChange={(v) => onTabChange(v as TabValue)} className={className}>
-      <TabsList className="grid w-full grid-cols-2">
+    <Tabs value={activeTab} onValueChange={(v) => onTabChange(v as TabValue)} className={cn('flex flex-col h-full', className)}>
+      <TabsList className="grid w-full grid-cols-2 flex-shrink-0">
         <TabsTrigger value="preview">
           <Eye className="mr-2 h-4 w-4" />
           Preview
@@ -41,19 +43,8 @@ export const TabsContainer: React.FC<TabsContainerProps> = ({
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="preview" className="mt-4">
-        <div className="border rounded-lg p-8 min-h-[400px] flex items-center justify-center">
-          {svgContent ? (
-            <div
-              dangerouslySetInnerHTML={{ __html: svgContent }}
-              className="max-w-full max-h-full"
-            />
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              No SVG content to preview. Click Input button to add SVG.
-            </p>
-          )}
-        </div>
+      <TabsContent value="preview" className="mt-4 flex-1 min-h-[300px]">
+        <SvgPreview svgContent={svgContent} />
       </TabsContent>
 
       <TabsContent value="options" className="mt-4">
