@@ -27,7 +27,7 @@ function DragRegion() {
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark">
+    <ThemeProvider defaultTheme="system">
       <DragRegion />
       <SnowEffect />
       <div className="fixed right-3 top-2 z-[9999]">

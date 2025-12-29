@@ -38,7 +38,11 @@ export interface SvgAst {
 
 /** SVG 파싱 에러 */
 export class SvgParseError extends Error {
-  constructor(message: string, public readonly line?: number, public readonly column?: number) {
+  constructor(
+    message: string,
+    public readonly line?: number,
+    public readonly column?: number
+  ) {
     super(message);
     this.name = 'SvgParseError';
   }
