@@ -9,35 +9,41 @@ export function UpdateBanner() {
   if (!update || dismissed) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-80 rounded-lg bg-neutral-800 p-4 text-white shadow-lg dark:bg-neutral-900">
+    <div className="fixed bottom-4 right-4 z-50 w-80 rounded-lg border bg-card p-4 text-card-foreground shadow-lg">
       <div className="font-medium">새 버전 사용 가능</div>
-      <div className="mt-1 text-sm opacity-90">v{update.version} 버전이 준비되었습니다.</div>
+      <div className="mt-1 text-sm text-muted-foreground">
+        v{update.version} 버전이 준비되었습니다.
+      </div>
 
       {error && (
-        <div className="mt-2 rounded bg-red-500/20 px-2 py-1 text-xs text-red-100">{error}</div>
+        <div className="mt-2 rounded bg-destructive/20 px-2 py-1 text-xs text-destructive">
+          {error}
+        </div>
       )}
 
       {downloading ? (
         <div className="mt-3">
-          <div className="h-2 overflow-hidden rounded-full bg-neutral-500">
+          <div className="h-2 overflow-hidden rounded-full bg-muted">
             <div
-              className="h-full bg-white transition-all duration-300"
+              className="h-full bg-primary transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <div className="mt-1 text-xs">{Math.round(progress)}% 다운로드 중...</div>
+          <div className="mt-1 text-xs text-muted-foreground">
+            {Math.round(progress)}% 다운로드 중...
+          </div>
         </div>
       ) : (
         <div className="mt-3 flex gap-2">
           <button
             onClick={installUpdate}
-            className="rounded bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 hover:bg-neutral-100"
+            className="rounded bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
             지금 업데이트
           </button>
           <button
             onClick={() => handleDismiss(update.version, setDismissed)}
-            className="px-3 py-1.5 text-sm text-white/80 hover:text-white"
+            className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground"
           >
             나중에
           </button>
