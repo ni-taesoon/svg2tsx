@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { check, Update } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
+import { t } from '@/i18n';
 
 export interface UpdateState {
   update: Update | null;
@@ -26,9 +27,9 @@ export function useAutoUpdate() {
       setState((prev) => ({ ...prev, update: available, checking: false }));
       return available;
     } catch (error) {
-      const message = error instanceof Error ? error.message : '업데이트 확인 실패';
+      const message = error instanceof Error ? error.message : t('update.error.checkFailed');
       setState((prev) => ({ ...prev, error: message, checking: false }));
-      console.error('업데이트 확인 실패:', error);
+      console.error(t('update.error.checkFailed'), error);
       return null;
     }
   }, []);
@@ -61,13 +62,13 @@ export function useAutoUpdate() {
 
       await relaunch();
     } catch (error) {
-      const message = error instanceof Error ? error.message : '업데이트 설치 실패';
+      const message = error instanceof Error ? error.message : t('update.error.installFailed');
       setState((prev) => ({
         ...prev,
         error: message,
         downloading: false,
       }));
-      console.error('업데이트 설치 실패:', error);
+      console.error(t('update.error.installFailed'), error);
     }
   }, [state.update]);
 

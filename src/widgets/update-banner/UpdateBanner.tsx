@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAutoUpdate } from '@/app/hooks/useAutoUpdate';
+import { t } from '@/i18n';
 
 export function UpdateBanner() {
   const { update, downloading, progress, installUpdate, error } = useAutoUpdate();
@@ -10,9 +11,9 @@ export function UpdateBanner() {
 
   return (
     <div className="fixed bottom-4 right-4 z-50 w-80 rounded-lg border bg-card p-4 text-card-foreground shadow-lg">
-      <div className="font-medium">새 버전 사용 가능</div>
+      <div className="font-medium">{t('update.availableTitle')}</div>
       <div className="mt-1 text-sm text-muted-foreground">
-        v{update.version} 버전이 준비되었습니다.
+        {t('update.availableDescription', { version: update.version })}
       </div>
 
       {error && (
@@ -30,7 +31,7 @@ export function UpdateBanner() {
             />
           </div>
           <div className="mt-1 text-xs text-muted-foreground">
-            {Math.round(progress)}% 다운로드 중...
+            {t('update.downloadingProgress', { progress: Math.round(progress) })}
           </div>
         </div>
       ) : (
@@ -39,13 +40,13 @@ export function UpdateBanner() {
             onClick={installUpdate}
             className="rounded bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
-            지금 업데이트
+            {t('update.installNow')}
           </button>
           <button
             onClick={() => handleDismiss(update.version, setDismissed)}
             className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground"
           >
-            나중에
+            {t('update.later')}
           </button>
         </div>
       )}

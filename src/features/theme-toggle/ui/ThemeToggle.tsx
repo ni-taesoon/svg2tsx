@@ -7,6 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui';
 import { useTheme } from '@/app/providers';
+import { t } from '@/i18n';
 
 export const ThemeToggle: React.FC = () => {
   const { theme, setTheme } = useTheme();
@@ -27,7 +28,7 @@ export const ThemeToggle: React.FC = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="h-8 w-8" data-testid="theme-toggle">
           {getCurrentIcon()}
-          <span className="sr-only">테마 변경</span>
+          <span className="sr-only">{t('theme.toggleSrOnly')}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -36,21 +37,21 @@ export const ThemeToggle: React.FC = () => {
           className={theme === 'light' ? 'bg-accent' : ''}
         >
           <Sun className="mr-2 h-4 w-4" />
-          Light
+          {t('theme.light')}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme('dark')}
           className={theme === 'dark' ? 'bg-accent' : ''}
         >
           <Moon className="mr-2 h-4 w-4" />
-          Dark
+          {t('theme.dark')}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme('system')}
           className={theme === 'system' ? 'bg-accent' : ''}
         >
           <Monitor className="mr-2 h-4 w-4" />
-          System
+          {t('theme.system')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

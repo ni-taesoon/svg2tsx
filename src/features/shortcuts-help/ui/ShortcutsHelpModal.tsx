@@ -4,6 +4,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/shared/ui';
 import { SHORTCUTS, getShortcutLabel } from '@/shared/config/shortcuts';
+import { t } from '@/i18n';
 
 interface ShortcutItemProps {
   label: string;
@@ -29,33 +30,33 @@ export const ShortcutsHelpModal: React.FC<ShortcutsHelpModalProps> = ({ open, on
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>키보드 단축키</DialogTitle>
-          <DialogDescription>빠른 작업을 위한 단축키 목록입니다.</DialogDescription>
+          <DialogTitle>{t('shortcuts.title')}</DialogTitle>
+          <DialogDescription>{t('shortcuts.description')}</DialogDescription>
         </DialogHeader>
         <div className="divide-y">
           <ShortcutItem
             label={getShortcutLabel(SHORTCUTS.SWITCH_TO_INPUT)}
-            description={SHORTCUTS.SWITCH_TO_INPUT.description}
+            description={t('shortcuts.openFile')}
           />
           <ShortcutItem
             label={getShortcutLabel(SHORTCUTS.SWITCH_TO_PREVIEW)}
-            description={SHORTCUTS.SWITCH_TO_PREVIEW.description}
+            description={t('shortcuts.switchPreview')}
           />
           <ShortcutItem
             label={getShortcutLabel(SHORTCUTS.SWITCH_TO_OPTIONS)}
-            description={SHORTCUTS.SWITCH_TO_OPTIONS.description}
+            description={t('shortcuts.switchOptions')}
           />
           <ShortcutItem
             label={getShortcutLabel(SHORTCUTS.SAVE_FILE)}
-            description={SHORTCUTS.SAVE_FILE.description}
+            description={t('shortcuts.saveFile')}
           />
           <ShortcutItem
             label={getShortcutLabel(SHORTCUTS.COPY_CODE)}
-            description={SHORTCUTS.COPY_CODE.description}
+            description={t('shortcuts.copyCode')}
           />
           <ShortcutItem
             label={getShortcutLabel(SHORTCUTS.SHOW_HELP)}
-            description={SHORTCUTS.SHOW_HELP.description}
+            description={t('shortcuts.showHelp')}
           />
         </div>
       </DialogContent>

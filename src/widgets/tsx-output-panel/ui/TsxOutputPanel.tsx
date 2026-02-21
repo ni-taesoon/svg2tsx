@@ -8,6 +8,7 @@ import { CodePreview } from '@/shared/ui';
 import { CopyCodeButton } from '@/features/copy-code';
 import { SaveFileButton } from '@/features/save-file';
 import { cn } from '@/shared/lib/utils';
+import { t } from '@/i18n';
 
 export interface TsxOutputPanelProps {
   code: string;
@@ -28,7 +29,7 @@ export const TsxOutputPanel: React.FC<TsxOutputPanelProps> = ({
     <div className={cn('bg-secondary/50 flex flex-col', className)}>
       {/* Header - 고정 */}
       <div className="flex-shrink-0 flex items-center justify-between px-4 pt-3 pb-2">
-        <h3 className="text-sm font-medium">Output</h3>
+        <h3 className="text-sm font-medium">{t('tsxOutput.title')}</h3>
         <div className="flex items-center gap-2">
           <CopyCodeButton code={code} />
           <SaveFileButton content={code} defaultFileName={defaultFileName} />
@@ -42,12 +43,12 @@ export const TsxOutputPanel: React.FC<TsxOutputPanelProps> = ({
             {error}
           </div>
         ) : isLoading ? (
-          <div className="text-muted-foreground text-sm p-4">Converting SVG to TSX...</div>
+          <div className="text-muted-foreground text-sm p-4">{t('tsxOutput.loading')}</div>
         ) : code ? (
           <CodePreview code={code} language="tsx" className="h-full" />
         ) : (
           <div className="text-muted-foreground text-sm p-4 border border-dashed rounded-lg">
-            No output yet. Convert SVG to see the result.
+            {t('tsxOutput.empty')}
           </div>
         )}
       </div>
