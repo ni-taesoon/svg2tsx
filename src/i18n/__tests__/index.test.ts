@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import enLocale from '../locales/en.json';
+import jaLocale from '../locales/ja.json';
+import koLocale from '../locales/ko.json';
+import zhLocale from '../locales/zh.json';
 import {
   APP_LANG_STORAGE_KEY,
   DEFAULT_LOCALE,
@@ -21,6 +25,8 @@ describe('i18n', () => {
       expect(resolveLocale({ lang: 'ko-KR' })).toBe('ko');
       expect(resolveLocale({ lang: 'en-US' })).toBe('en');
       expect(resolveLocale({ lang: 'ja-JP' })).toBe('ja');
+      expect(resolveLocale({ lang: 'zh-CN' })).toBe('zh');
+      expect(resolveLocale({ lang: 'zh-TW' })).toBe('zh');
     });
 
     it('applies locale source priority in order', () => {
@@ -55,6 +61,7 @@ describe('i18n', () => {
       expect(translate('ko', 'main.header.input')).toBe('입력');
       expect(translate('en', 'main.header.input')).toBe('Input');
       expect(translate('ja', 'main.header.input')).toBe('入力');
+      expect(translate('zh', 'main.header.input')).toBe('输入');
     });
 
     it('replaces interpolation placeholders', () => {
@@ -67,6 +74,19 @@ describe('i18n', () => {
       expect(translate('ja', 'error.svgParse', { message: 'invalid tag' })).toBe(
         'SVG解析エラー: invalid tag'
       );
+      expect(translate('zh', 'toast.fileLoaded', { fileName: 'icon.svg' })).toBe(
+        'icon.svg 文件已加载'
+      );
+    });
+  });
+
+  describe('locale resources', () => {
+    it('keeps locale message keys aligned across all locales', () => {
+      const baseKeys = Object.keys(koLocale).sort();
+
+      expect(Object.keys(enLocale).sort()).toEqual(baseKeys);
+      expect(Object.keys(jaLocale).sort()).toEqual(baseKeys);
+      expect(Object.keys(zhLocale).sort()).toEqual(baseKeys);
     });
   });
 
@@ -92,6 +112,9 @@ describe('i18n', () => {
 
       setCurrentLocale('ko');
       expect(t('toast.copied')).toBe('클립보드에 복사되었습니다');
+
+      setCurrentLocale('zh');
+      expect(t('toast.copied')).toBe('已复制到剪贴板');
     });
 
     it('keeps runtime locale when localStorage write fails', () => {
