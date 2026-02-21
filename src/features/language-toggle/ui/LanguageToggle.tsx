@@ -13,6 +13,7 @@ const LOCALE_LABEL_KEYS: Record<Locale, MessageKey> = {
   ko: 'language.korean',
   en: 'language.english',
   ja: 'language.japanese',
+  zh: 'language.chinese',
 };
 
 export interface LanguageToggleProps {
