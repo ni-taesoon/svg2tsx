@@ -1,0 +1,14 @@
+{
+  "main.dragOverlay.title": "SVG 파일을 여기에 놓으세요",
+  "main.dragOverlay.description": ".svg 파일만 지원됩니다",
+  "main.header.subtitle": "SVG를 React TSX 컴포넌트로 변환",
+  "main.header.input": "입력",
+  "toast.fileLoaded": "{fileName} 파일이 로드되었습니다",
+  "error.svgParse": "SVG 파싱 에러: {message}",
+  "error.convertFailed": "SVG 변환에 실패했습니다",
+  "toast.noCodeToCopy": "복사할 코드가 없습니다",
+  "toast.copied": "클립보드에 복사되었습니다",
+  "toast.copyFailed": "클립보드 복사에 실패했습니다",
+  "toast.fileSaved": "파일이 저장되었습니다",
+  "toast.fileSaveFailed": "파일 저장에 실패했습니다"
+}

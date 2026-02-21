@@ -9,6 +9,7 @@ SVG 파일을 React TSX 컴포넌트로 변환하는 Tauri v2 기반 데스크�
 - **SVG 최적화**: 불필요한 속성 제거, ID/Class 정리 등
 - **TSX 변환 옵션**: memo, forwardRef, 컴포넌트 타입 선택
 - **클립보드 복사 & 파일 저장**: 원클릭 복사 및 .tsx 파일 저장
+- **다중 언어 지원**: 한국어/영어 UI 메시지 (i18n)
 
 ## 기술 스택
 
@@ -46,6 +47,24 @@ bun run tauri dev
 
 # Frontend만 실행
 bun run dev
+```
+
+### 언어 설정
+
+기본 언어는 브라우저/OS 언어를 따라가며, 아래 방식으로 강제할 수 있습니다.
+
+```bash
+# 영어 강제
+VITE_APP_LANG=en bun run dev
+
+# 한국어 강제
+VITE_APP_LANG=ko bun run dev
+```
+
+또는 URL 쿼리로 `lang` 값을 지정할 수 있습니다.
+
+```text
+http://localhost:1420/?lang=en
 ```
 
 ### 빌드

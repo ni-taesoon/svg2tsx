@@ -1,0 +1,14 @@
+{
+  "main.dragOverlay.title": "Drop SVG file here",
+  "main.dragOverlay.description": "Only .svg files are supported",
+  "main.header.subtitle": "Convert SVG to React TSX components",
+  "main.header.input": "Input",
+  "toast.fileLoaded": "{fileName} file loaded",
+  "error.svgParse": "SVG parse error: {message}",
+  "error.convertFailed": "Failed to convert SVG",
+  "toast.noCodeToCopy": "No code to copy",
+  "toast.copied": "Copied to clipboard",
+  "toast.copyFailed": "Failed to copy to clipboard",
+  "toast.fileSaved": "File saved",
+  "toast.fileSaveFailed": "Failed to save file"
+}

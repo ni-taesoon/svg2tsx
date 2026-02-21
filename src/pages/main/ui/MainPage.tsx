@@ -18,6 +18,7 @@ import { Button, toast, ResizablePanelGroup, ResizablePanel, ResizableHandle } f
 import { useKeyboardShortcuts, useTauriDragDrop } from '@/shared/hooks';
 import { copyToClipboard } from '@/features/copy-code/lib/clipboard';
 import { saveFileDialog, saveTsxFile } from '@/shared/api';
+import { t } from '../../../i18n';
 
 export interface MainPageProps {
   className?: string;
@@ -48,7 +49,7 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
       if (componentName) {
         setOptions((prev) => ({ ...prev, componentName }));
       }
-      toast.success(`${fileName} 파일이 로드되었습니다`);
+      toast.success(t('toast.fileLoaded', { fileName }));
     },
     onError: (err) => {
       toast.error(err.message);
@@ -65,7 +66,7 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
         if (componentName) {
           setOptions((prev) => ({ ...prev, componentName }));
         }
-        toast.success(`${file.name} 파일이 로드되었습니다`);
+        toast.success(t('toast.fileLoaded', { fileName: file.name }));
       });
     }
     e.target.value = ''; // 같은 파일 재선택 허용
@@ -94,9 +95,9 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
       setTsxCode(tsxOutput);
     } catch (err) {
       if (err instanceof SvgParseError) {
-        setError(`SVG 파싱 에러: ${err.message}`);
+        setError(t('error.svgParse', { message: err.message }));
       } else {
-        setError(err instanceof Error ? err.message : 'Failed to convert SVG');
+        setError(err instanceof Error ? err.message : t('error.convertFailed'));
       }
     } finally {
       setIsLoading(false);
@@ -105,14 +106,14 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
 
   const handleCopy = useCallback(async () => {
     if (!tsxCode) {
-      toast.error('복사할 코드가 없습니다');
+      toast.error(t('toast.noCodeToCopy'));
       return;
     }
     const success = await copyToClipboard(tsxCode);
     if (success) {
-      toast.success('클립보드에 복사되었습니다');
+      toast.success(t('toast.copied'));
     } else {
-      toast.error('클립보드 복사에 실패했습니다');
+      toast.error(t('toast.copyFailed'));
     }
   }, [tsxCode]);
 
@@ -127,9 +128,9 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
         return;
       }
       await saveTsxFile(savePath, tsxCode);
-      toast.success('파일이 저장되었습니다');
+      toast.success(t('toast.fileSaved'));
     } catch (err) {
-      toast.error('파일 저장에 실패했습니다', {
+      toast.error(t('toast.fileSaveFailed'), {
         description: err instanceof Error ? err.message : undefined,
       });
     } finally {
@@ -153,8 +154,10 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
       {isDragging && (
         <div className="fixed inset-0 z-50 bg-primary/10 backdrop-blur-sm flex items-center justify-center pointer-events-none">
           <div className="bg-background border-2 border-dashed border-primary rounded-xl p-8 text-center">
-            <p className="text-lg font-medium">SVG 파일을 여기에 놓으세요</p>
-            <p className="text-sm text-muted-foreground mt-1">.svg 파일만 지원됩니다</p>
+            <p className="text-lg font-medium">{t('main.dragOverlay.title')}</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {t('main.dragOverlay.description')}
+            </p>
           </div>
         </div>
       )}
@@ -163,11 +166,11 @@ export const MainPage: React.FC<MainPageProps> = ({ className }) => {
       <header className="flex-shrink-0 border-b p-4 flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold">SVG2TSX</h1>
-          <p className="text-sm text-muted-foreground">Convert SVG to React TSX components</p>
+          <p className="text-sm text-muted-foreground">{t('main.header.subtitle')}</p>
         </div>
         <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
           <FileInput className="mr-2 h-4 w-4" />
-          Input
+          {t('main.header.input')}
         </Button>
         <input
           ref={fileInputRef}
