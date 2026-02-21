@@ -12,6 +12,7 @@ import { SUPPORTED_LOCALES, t, type Locale, type MessageKey } from '@/i18n';
 const LOCALE_LABEL_KEYS: Record<Locale, MessageKey> = {
   ko: 'language.korean',
   en: 'language.english',
+  ja: 'language.japanese',
 };
 
 export interface LanguageToggleProps {

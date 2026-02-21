@@ -1,7 +1,8 @@
 import enLocale from './locales/en.json';
+import jaLocale from './locales/ja.json';
 import koLocale from './locales/ko.json';
 
-export const SUPPORTED_LOCALES = ['ko', 'en'] as const;
+export const SUPPORTED_LOCALES = ['ko', 'en', 'ja'] as const;
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
@@ -13,10 +14,12 @@ export const APP_LANG_STORAGE_KEY = 'svg2tsx-lang';
 
 const koMessages = koLocale;
 const enMessages: typeof koMessages = enLocale;
+const jaMessages: typeof koMessages = jaLocale;
 
 const messages = {
   ko: koMessages,
   en: enMessages,
+  ja: jaMessages,
 } as const;
 
 export type MessageKey = keyof typeof koMessages;
@@ -28,6 +31,7 @@ function normalizeLocale(lang: string | null | undefined): Locale | null {
   const normalized = lang.trim().toLowerCase();
   if (normalized.startsWith('ko')) return 'ko';
   if (normalized.startsWith('en')) return 'en';
+  if (normalized.startsWith('ja')) return 'ja';
 
   return null;
 }

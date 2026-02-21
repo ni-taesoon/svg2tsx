@@ -20,6 +20,7 @@ describe('i18n', () => {
     it('supports locale strings with region suffix', () => {
       expect(resolveLocale({ lang: 'ko-KR' })).toBe('ko');
       expect(resolveLocale({ lang: 'en-US' })).toBe('en');
+      expect(resolveLocale({ lang: 'ja-JP' })).toBe('ja');
     });
 
     it('applies locale source priority in order', () => {
@@ -53,6 +54,7 @@ describe('i18n', () => {
     it('returns translated string for target locale', () => {
       expect(translate('ko', 'main.header.input')).toBe('입력');
       expect(translate('en', 'main.header.input')).toBe('Input');
+      expect(translate('ja', 'main.header.input')).toBe('入力');
     });
 
     it('replaces interpolation placeholders', () => {
@@ -62,25 +64,31 @@ describe('i18n', () => {
       expect(translate('ko', 'error.svgParse', { message: 'invalid tag' })).toBe(
         'SVG 파싱 에러: invalid tag'
       );
+      expect(translate('ja', 'error.svgParse', { message: 'invalid tag' })).toBe(
+        'SVG解析エラー: invalid tag'
+      );
     });
   });
 
   describe('setCurrentLocale', () => {
     it('updates and persists locale', () => {
-      setCurrentLocale('en');
-      expect(getCurrentLocale()).toBe('en');
-      expect(localStorage.getItem(APP_LANG_STORAGE_KEY)).toBe('en');
+      setCurrentLocale('ja');
+      expect(getCurrentLocale()).toBe('ja');
+      expect(localStorage.getItem(APP_LANG_STORAGE_KEY)).toBe('ja');
     });
 
     it('keeps current locale for unsupported input', () => {
-      setCurrentLocale('en');
+      setCurrentLocale('ja');
       setCurrentLocale('jp');
-      expect(getCurrentLocale()).toBe('en');
+      expect(getCurrentLocale()).toBe('ja');
     });
 
     it('uses active locale when calling t()', () => {
       setCurrentLocale('en');
       expect(t('toast.copied')).toBe('Copied to clipboard');
+
+      setCurrentLocale('ja');
+      expect(t('toast.copied')).toBe('クリップボードにコピーしました');
 
       setCurrentLocale('ko');
       expect(t('toast.copied')).toBe('클립보드에 복사되었습니다');
