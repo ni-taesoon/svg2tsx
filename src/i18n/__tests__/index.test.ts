@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   APP_LANG_STORAGE_KEY,
@@ -84,6 +84,17 @@ describe('i18n', () => {
 
       setCurrentLocale('ko');
       expect(t('toast.copied')).toBe('클립보드에 복사되었습니다');
+    });
+
+    it('keeps runtime locale when localStorage write fails', () => {
+      const setItemSpy = vi.spyOn(localStorage, 'setItem').mockImplementation(() => {
+        throw new Error('storage unavailable');
+      });
+
+      expect(() => setCurrentLocale('en')).not.toThrow();
+      expect(getCurrentLocale()).toBe('en');
+
+      setItemSpy.mockRestore();
     });
   });
 });

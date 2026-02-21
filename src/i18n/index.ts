@@ -39,23 +39,21 @@ function getBrowserLanguage(): string | null {
 
 function getQueryLanguage(): string | null {
   if (typeof window === 'undefined') return null;
-
-  const query = window.location.search.startsWith('?')
-    ? window.location.search.slice(1)
-    : window.location.search;
-
-  if (!query) return null;
-
-  const langEntry = query.split('&').find((entry) => entry.startsWith('lang='));
-  if (!langEntry) return null;
-
-  const encodedLang = langEntry.slice('lang='.length);
-  return encodedLang ? decodeURIComponent(encodedLang) : null;
+  try {
+    const lang = new window.URLSearchParams(window.location.search).get('lang');
+    return lang && lang.trim().length > 0 ? lang : null;
+  } catch {
+    return null;
+  }
 }
 
 function getStoredLanguage(): string | null {
   if (typeof localStorage === 'undefined') return null;
-  return localStorage.getItem(APP_LANG_STORAGE_KEY);
+  try {
+    return localStorage.getItem(APP_LANG_STORAGE_KEY);
+  } catch {
+    return null;
+  }
 }
 
 function getEnvLanguage(): string | null {
@@ -99,7 +97,11 @@ export function setCurrentLocale(lang: string): Locale {
     currentLocale = nextLocale;
 
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(APP_LANG_STORAGE_KEY, nextLocale);
+      try {
+        localStorage.setItem(APP_LANG_STORAGE_KEY, nextLocale);
+      } catch {
+        // Ignore storage write errors (e.g. privacy mode) and keep runtime locale.
+      }
     }
   }
 
