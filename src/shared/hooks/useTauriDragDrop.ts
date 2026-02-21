@@ -7,6 +7,7 @@
 import { useEffect, useState } from 'react';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { readTextFile } from '@tauri-apps/plugin-fs';
+import { t } from '@/i18n';
 
 export interface UseTauriDragDropOptions {
   /** 허용할 파일 확장자 (예: ['.svg']) */
@@ -47,7 +48,7 @@ export const useTauriDragDrop = (options: UseTauriDragDropOptions = {}): UseTaur
           );
 
           if (!validPath) {
-            onError?.(new Error('지원하지 않는 파일 형식입니다. SVG 파일만 허용됩니다.'));
+            onError?.(new Error(t('dragDrop.invalidFileType')));
             return;
           }
 
@@ -56,7 +57,7 @@ export const useTauriDragDrop = (options: UseTauriDragDropOptions = {}): UseTaur
             const fileName = validPath.split('/').pop() || 'unknown.svg';
             onFileDrop?.(content, fileName);
           } catch (err) {
-            onError?.(err instanceof Error ? err : new Error('파일 읽기 실패'));
+            onError?.(err instanceof Error ? err : new Error(t('dragDrop.readFailed')));
           }
         }
       });

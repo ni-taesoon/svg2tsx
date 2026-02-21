@@ -6,6 +6,7 @@
 
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/shared/ui';
+import { t } from '@/i18n';
 
 export interface ConvertButtonProps {
   onClick: () => void;
@@ -25,15 +26,15 @@ export const ConvertButton: React.FC<ConvertButtonProps> = ({
       onClick={onClick}
       disabled={disabled || isLoading}
       className={className}
-      aria-label={isLoading ? 'Converting SVG to TSX' : 'Convert SVG to TSX'}
+      aria-label={isLoading ? t('convert.ariaConverting') : t('convert.ariaConvert')}
     >
       {isLoading ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Converting...
+          {t('convert.loading')}
         </>
       ) : (
-        'Convert to TSX'
+        t('convert.button')
       )}
     </Button>
   );

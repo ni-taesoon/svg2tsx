@@ -8,6 +8,7 @@
 import { useState, useCallback } from 'react';
 import { ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { Button } from '@/shared/ui';
+import { t } from '@/i18n';
 
 interface SvgPreviewProps {
   svgContent: string;
@@ -35,9 +36,7 @@ export const SvgPreview: React.FC<SvgPreviewProps> = ({ svgContent }) => {
   if (!svgContent) {
     return (
       <div className="h-full flex items-center justify-center">
-        <p className="text-sm text-muted-foreground">
-          No SVG content to preview. Click Input button to add SVG.
-        </p>
+        <p className="text-sm text-muted-foreground">{t('preview.empty')}</p>
       </div>
     );
   }
@@ -50,7 +49,7 @@ export const SvgPreview: React.FC<SvgPreviewProps> = ({ svgContent }) => {
           variant="outline"
           size="icon"
           onClick={handleZoomIn}
-          title="확대"
+          title={t('preview.zoomInTitle')}
           disabled={scale >= MAX_SCALE}
         >
           <ZoomIn className="h-4 w-4" />
@@ -59,7 +58,7 @@ export const SvgPreview: React.FC<SvgPreviewProps> = ({ svgContent }) => {
           variant="outline"
           size="icon"
           onClick={handleZoomOut}
-          title="축소"
+          title={t('preview.zoomOutTitle')}
           disabled={scale <= MIN_SCALE}
         >
           <ZoomOut className="h-4 w-4" />
@@ -68,7 +67,7 @@ export const SvgPreview: React.FC<SvgPreviewProps> = ({ svgContent }) => {
           variant="outline"
           size="icon"
           onClick={handleReset}
-          title="원래 크기"
+          title={t('preview.resetTitle')}
           disabled={scale === 1}
         >
           <RotateCcw className="h-4 w-4" />

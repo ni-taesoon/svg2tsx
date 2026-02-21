@@ -7,6 +7,7 @@
 import { useState } from 'react';
 import { Check, Download } from 'lucide-react';
 import { Button, toast } from '@/shared/ui';
+import { t } from '@/i18n';
 import { saveFileDialog, saveTsxFile } from '@/shared/api';
 
 export interface SaveFileButtonProps {
@@ -38,10 +39,10 @@ export const SaveFileButton: React.FC<SaveFileButtonProps> = ({
 
       await saveTsxFile(savePath, content);
       setIsSaved(true);
-      toast.success('파일이 저장되었습니다');
+      toast.success(t('toast.fileSaved'));
       setTimeout(() => setIsSaved(false), 2000);
     } catch (err) {
-      toast.error('파일 저장에 실패했습니다', {
+      toast.error(t('toast.fileSaveFailed'), {
         description: err instanceof Error ? err.message : undefined,
       });
     } finally {
@@ -56,7 +57,7 @@ export const SaveFileButton: React.FC<SaveFileButtonProps> = ({
       onClick={handleSave}
       className={className}
       disabled={!content || isSaving}
-      aria-label={isSaved ? 'File saved' : 'Save as TSX file'}
+      aria-label={isSaved ? t('saveButton.ariaSaved') : t('saveButton.ariaSave')}
     >
       {isSaved ? <Check className="h-4 w-4" /> : <Download className="h-4 w-4" />}
     </Button>

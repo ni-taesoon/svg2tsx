@@ -7,6 +7,7 @@
 import { useState, useCallback } from 'react';
 import { Upload } from 'lucide-react';
 import { Textarea } from '@/shared/ui';
+import { t } from '@/i18n';
 
 export interface SvgInputPanelProps {
   value: string;
@@ -80,12 +81,12 @@ export const SvgInputPanel: React.FC<SvgInputPanelProps> = ({
           accept=".svg"
           onChange={handleFileInput}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          aria-label="Upload SVG file"
+          aria-label={t('svgInput.uploadAria')}
         />
         <div className="flex flex-col items-center gap-2 text-center pointer-events-none">
           <Upload className="h-8 w-8 text-muted-foreground" />
-          <p className="text-sm font-medium">Drop SVG file here or click to upload</p>
-          <p className="text-xs text-muted-foreground">Supports .svg files only</p>
+          <p className="text-sm font-medium">{t('svgInput.dropTitle')}</p>
+          <p className="text-xs text-muted-foreground">{t('svgInput.dropDescription')}</p>
         </div>
       </div>
 
@@ -95,7 +96,7 @@ export const SvgInputPanel: React.FC<SvgInputPanelProps> = ({
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">or</span>
+          <span className="bg-background px-2 text-muted-foreground">{t('svgInput.or')}</span>
         </div>
       </div>
 
@@ -103,9 +104,9 @@ export const SvgInputPanel: React.FC<SvgInputPanelProps> = ({
       <Textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Paste SVG code here..."
+        placeholder={t('svgInput.textPlaceholder')}
         className="min-h-[200px] text-sm resize-none"
-        aria-label="SVG code input"
+        aria-label={t('svgInput.textAria')}
       />
     </div>
   );

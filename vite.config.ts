@@ -40,6 +40,7 @@ export default defineConfig(async () => ({
       '@/features': path.resolve(__dirname, './src/features'),
       '@/entities': path.resolve(__dirname, './src/entities'),
       '@/shared': path.resolve(__dirname, './src/shared'),
+      '@/i18n': path.resolve(__dirname, './src/i18n'),
     },
   },
 }));

@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui';
 import { OptionsPanel } from '@/widgets/options-panel';
 import { cn } from '@/shared/lib/utils';
 import type { ConversionOptions } from '@/entities/options';
+import { t } from '@/i18n';
 import { SvgPreview } from './SvgPreview';
 
 export type TabValue = 'preview' | 'options';
@@ -39,11 +40,11 @@ export const TabsContainer: React.FC<TabsContainerProps> = ({
       <TabsList className="grid w-full grid-cols-2 flex-shrink-0">
         <TabsTrigger value="preview">
           <Eye className="mr-2 h-4 w-4" />
-          Preview
+          {t('tabs.preview')}
         </TabsTrigger>
         <TabsTrigger value="options">
           <Settings className="mr-2 h-4 w-4" />
-          Options
+          {t('tabs.options')}
         </TabsTrigger>
       </TabsList>
 
